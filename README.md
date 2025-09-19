@@ -19,7 +19,7 @@ This repository contains a Nix Flake that enables a shell with the [`leo/gf180mc
 
 Simply run `nix-shell` in the root of this repository.
 
-> [!INFO]
+> [!NOTE]
 > Since we are working on a branch of LibreLane, OpenROAD needs to be compiled locally. This will be done automatically by Nix and the binary is cached locally. 
 
 With this shell run the implementation:
