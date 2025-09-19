@@ -10,23 +10,27 @@ module chip_core #(
     input  logic clk,       // clock
     input  logic rst_n,     // reset (active low)
     
-    input  wire [NUM_INPUT-1:0] input_in,    // Dedicated inputs
-    output wire [NUM_INPUT-1:0] input_pu,
-    output wire [NUM_INPUT-1:0] input_pd,
+    input  wire [NUM_INPUT-1:0] input_in,   // Input value
+    output wire [NUM_INPUT-1:0] input_pu,   // Pull-up
+    output wire [NUM_INPUT-1:0] input_pd,   // Pull-down
 
-    input  wire [NUM_BIDIR-1:0] bidir_in,   // IOs: Input path
-    output wire [NUM_BIDIR-1:0] bidir_out,  // IOs: Output path
-    output wire [NUM_BIDIR-1:0] bidir_oe,   // IOs: Enable path (active high: 0=input, 1=output)
-    output wire [NUM_BIDIR-1:0] bidir_cs,
-    output wire [NUM_BIDIR-1:0] bidir_sl,
-    output wire [NUM_BIDIR-1:0] bidir_ie,
-    output wire [NUM_BIDIR-1:0] bidir_pu,
-    output wire [NUM_BIDIR-1:0] bidir_pd
+    input  wire [NUM_BIDIR-1:0] bidir_in,   // Input value
+    output wire [NUM_BIDIR-1:0] bidir_out,  // Output value
+    output wire [NUM_BIDIR-1:0] bidir_oe,   // Output enable
+    output wire [NUM_BIDIR-1:0] bidir_cs,   // Input type (0=CMOS Buffer, 1=Schmitt Trigger)
+    output wire [NUM_BIDIR-1:0] bidir_sl,   // Slew rate (0=fast, 1=slow)
+    output wire [NUM_BIDIR-1:0] bidir_ie,   // Input enable
+    output wire [NUM_BIDIR-1:0] bidir_pu,   // Pull-up
+    output wire [NUM_BIDIR-1:0] bidir_pd    // Pull-down
 );
 
+    // See here for usage: https://gf180mcu-pdk.readthedocs.io/en/latest/IPs/IO/gf180mcu_fd_io/digital.html
+    
+    // Disable pull-up and pull-down for input
     assign input_pu = '0;
     assign input_pd = '0;
 
+    // Set the bidir as output
     assign bidir_oe = '1;
     assign bidir_cs = '0;
     assign bidir_sl = '0;
