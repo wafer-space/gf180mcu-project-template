@@ -1,33 +1,64 @@
 // SPDX-FileCopyrightText: © 2025 wafer.space
 // SPDX-License-Identifier: Apache-2.0
 
-module chip_top (
+`default_nettype none
+
+module chip_top #(
+    parameter NUM_INPUT = 12,
+    parameter NUM_BIDIR = 42
+    )(
     `ifdef USE_POWER_PINS
     inout wire VDD,
     inout wire VSS,
     `endif
 
-    inout  wire       ena_PAD,
     inout  wire       clk_PAD,
     inout  wire       rst_n_PAD,
-    inout  wire [7:0] ui_PAD,
-    inout  wire [7:0] uo_PAD,
-    inout  wire [7:0] uio_PAD
+    
+    inout  wire [NUM_INPUT-1:0] input_PAD,
+    inout  wire [NUM_BIDIR-1:0] bidir_PAD
 );
 
-    wire       ena_PAD2CORE;
-    wire       clk_PAD2CORE;
-    wire       rst_n_PAD2CORE;
-    wire [7:0] ui_PAD2CORE;
-    wire [7:0] uo_CORE2PAD;
-    wire [7:0] uio_PAD2CORE;
-    wire [7:0] uio_CORE2PAD;
-    wire [7:0] uio_CORE2PAD_EN;
+    wire clk_PAD2CORE;
+    wire rst_n_PAD2CORE;
+    
+    wire [NUM_INPUT-1:0] input_PAD2CORE;
+    wire [NUM_INPUT-1:0] input_CORE2PAD_PU;
+    wire [NUM_INPUT-1:0] input_CORE2PAD_PD;
 
-    // Power/Ground IO pad instances
+    wire [NUM_BIDIR-1:0] bidir_PAD2CORE;
+    wire [NUM_BIDIR-1:0] bidir_CORE2PAD;
+    wire [NUM_BIDIR-1:0] bidir_CORE2PAD_OE;
+    wire [NUM_BIDIR-1:0] bidir_CORE2PAD_CS;
+    wire [NUM_BIDIR-1:0] bidir_CORE2PAD_SL;
+    wire [NUM_BIDIR-1:0] bidir_CORE2PAD_IE;
+    wire [NUM_BIDIR-1:0] bidir_CORE2PAD_PU;
+    wire [NUM_BIDIR-1:0] bidir_CORE2PAD_PD;
 
+    // Power / ground IO pad instances
+
+    // South
     (* keep *)
-    gf180mcu_fd_io__dvdd gf180mcu_fd_io__dvdd_south (
+    gf180mcu_fd_io__dvss dvss_south_0 (
+        `ifdef USE_POWER_PINS
+        	.DVDD   (VDD),
+	    .DVSS   (VSS),
+	    .VDD    (VDD)
+        `endif
+    );
+
+    // East
+    (* keep *)
+    gf180mcu_ws_io__dvss dvss_east_0 (
+        `ifdef USE_POWER_PINS
+        	.DVDD   (VDD),
+	    .DVSS   (VSS),
+	    .VDD    (VDD)
+        `endif
+    );
+    
+    (* keep *)
+    gf180mcu_ws_io__dvdd dvdd_east_0 (
         `ifdef USE_POWER_PINS
         	.DVDD   (VDD),
 	    .DVSS   (VSS),
@@ -36,7 +67,7 @@ module chip_top (
     );
 
     (* keep *)
-    gf180mcu_fd_io__dvss gf180mcu_fd_io__dvss_south (
+    gf180mcu_ws_io__dvss dvss_east_1 (
         `ifdef USE_POWER_PINS
         	.DVDD   (VDD),
 	    .DVSS   (VSS),
@@ -45,7 +76,16 @@ module chip_top (
     );
 
     (* keep *)
-    gf180mcu_fd_io__dvss gf180mcu_fd_io__dvss_south2 (
+    gf180mcu_ws_io__dvdd dvdd_east_1 (
+        `ifdef USE_POWER_PINS
+        	.DVDD   (VDD),
+	    .DVSS   (VSS),
+	    .VSS    (VSS)
+        `endif
+    );
+    
+   (* keep *)
+    gf180mcu_ws_io__dvss dvss_east_2 (
         `ifdef USE_POWER_PINS
         	.DVDD   (VDD),
 	    .DVSS   (VSS),
@@ -54,7 +94,45 @@ module chip_top (
     );
 
     (* keep *)
-    gf180mcu_fd_io__dvdd gf180mcu_fd_io__dvdd_south2 (
+    gf180mcu_ws_io__dvdd dvdd_east_2 (
+        `ifdef USE_POWER_PINS
+        	.DVDD   (VDD),
+	    .DVSS   (VSS),
+	    .VSS    (VSS)
+        `endif
+    );
+    
+    (* keep *)
+    gf180mcu_ws_io__dvss dvss_east_3 (
+        `ifdef USE_POWER_PINS
+        	.DVDD   (VDD),
+	    .DVSS   (VSS),
+	    .VDD    (VDD)
+        `endif
+    );
+
+    (* keep *)
+    gf180mcu_ws_io__dvdd dvdd_east_3 (
+        `ifdef USE_POWER_PINS
+        	.DVDD   (VDD),
+	    .DVSS   (VSS),
+	    .VSS    (VSS)
+        `endif
+    );
+    
+    // North
+    (* keep *)
+    gf180mcu_fd_io__dvss dvss_north_0 (
+        `ifdef USE_POWER_PINS
+        	.DVDD   (VDD),
+	    .DVSS   (VSS),
+	    .VDD    (VDD)
+        `endif
+    );
+    
+    // West
+    (* keep *)
+    gf180mcu_ws_io__dvdd dvdd_west_0 (
         `ifdef USE_POWER_PINS
         	.DVDD   (VDD),
 	    .DVSS   (VSS),
@@ -63,7 +141,16 @@ module chip_top (
     );
 
     (* keep *)
-    gf180mcu_ws_io__dvdd gf180mcu_ws_io__dvdd_east (
+    gf180mcu_ws_io__dvss dvss_west_0 (
+        `ifdef USE_POWER_PINS
+        	.DVDD   (VDD),
+	    .DVSS   (VSS),
+	    .VDD    (VDD)
+        `endif
+    );
+
+    (* keep *)
+    gf180mcu_ws_io__dvdd dvdd_west_1 (
         `ifdef USE_POWER_PINS
         	.DVDD   (VDD),
 	    .DVSS   (VSS),
@@ -72,7 +159,7 @@ module chip_top (
     );
 
     (* keep *)
-    gf180mcu_ws_io__dvss gf180mcu_ws_io__dvss_east (
+    gf180mcu_ws_io__dvss dvss_west_1 (
         `ifdef USE_POWER_PINS
         	.DVDD   (VDD),
 	    .DVSS   (VSS),
@@ -81,7 +168,7 @@ module chip_top (
     );
 
     (* keep *)
-    gf180mcu_ws_io__dvss gf180mcu_ws_io__dvss_east2 (
+    gf180mcu_ws_io__dvss dvss_west_2 (
         `ifdef USE_POWER_PINS
         	.DVDD   (VDD),
 	    .DVSS   (VSS),
@@ -90,25 +177,16 @@ module chip_top (
     );
 
     (* keep *)
-    gf180mcu_ws_io__dvdd gf180mcu_ws_io__dvdd_east2 (
+    gf180mcu_ws_io__dvdd dvdd_west_2 (
         `ifdef USE_POWER_PINS
         	.DVDD   (VDD),
 	    .DVSS   (VSS),
 	    .VSS    (VSS)
         `endif
     );
-
+    
     (* keep *)
-    gf180mcu_ws_io__dvdd gf180mcu_ws_io__dvdd_west (
-        `ifdef USE_POWER_PINS
-        	.DVDD   (VDD),
-	    .DVSS   (VSS),
-	    .VSS    (VSS)
-        `endif
-    );
-
-    (* keep *)
-    gf180mcu_ws_io__dvss gf180mcu_ws_io__dvss_west (
+    gf180mcu_ws_io__dvss dvss_west_3 (
         `ifdef USE_POWER_PINS
         	.DVDD   (VDD),
 	    .DVSS   (VSS),
@@ -117,52 +195,7 @@ module chip_top (
     );
 
     (* keep *)
-    gf180mcu_ws_io__dvss gf180mcu_ws_io__dvss_west2 (
-        `ifdef USE_POWER_PINS
-        	.DVDD   (VDD),
-	    .DVSS   (VSS),
-	    .VDD    (VDD)
-        `endif
-    );
-
-    (* keep *)
-    gf180mcu_ws_io__dvdd gf180mcu_ws_io__dvdd_west2 (
-        `ifdef USE_POWER_PINS
-        	.DVDD   (VDD),
-	    .DVSS   (VSS),
-	    .VSS    (VSS)
-        `endif
-    );
-
-    (* keep *)
-    gf180mcu_fd_io__dvdd gf180mcu_fd_io__dvdd_north (
-        `ifdef USE_POWER_PINS
-        	.DVDD   (VDD),
-	    .DVSS   (VSS),
-	    .VSS    (VSS)
-        `endif
-    );
-
-    (* keep *)
-    gf180mcu_fd_io__dvss gf180mcu_fd_io__dvss_north (
-        `ifdef USE_POWER_PINS
-        	.DVDD   (VDD),
-	    .DVSS   (VSS),
-	    .VDD    (VDD)
-        `endif
-    );
-
-    (* keep *)
-    gf180mcu_fd_io__dvss gf180mcu_fd_io__dvss_north2 (
-        `ifdef USE_POWER_PINS
-        	.DVDD   (VDD),
-	    .DVSS   (VSS),
-	    .VDD    (VDD)
-        `endif
-    );
-
-    (* keep *)
-    gf180mcu_fd_io__dvdd gf180mcu_fd_io__dvdd_north2 (
+    gf180mcu_ws_io__dvdd dvdd_west_3 (
         `ifdef USE_POWER_PINS
         	.DVDD   (VDD),
 	    .DVSS   (VSS),
@@ -172,7 +205,8 @@ module chip_top (
 
     // Signal IO pad instances
 
-    gf180mcu_fd_io__in_c gf180mcu_fd_io__in_c_ena (
+    // Schmitt trigger
+    gf180mcu_fd_io__in_s clk_pad (
         `ifdef USE_POWER_PINS
         .DVDD   (VDD),
         .DVSS   (VSS),
@@ -180,14 +214,15 @@ module chip_top (
         .VSS    (VSS),
         `endif
     
-        .Y (ena_PAD2CORE),
-        .PAD (ena_PAD),
+        .Y      (clk_PAD2CORE),
+        .PAD    (clk_PAD),
         
-        .PU (1'b0),
-        .PD (1'b0)
+        .PU     (1'b0),
+        .PD     (1'b0)
     );
     
-    gf180mcu_fd_io__in_s gf180mcu_fd_io__in_s_clk (
+    // Normal input
+    gf180mcu_fd_io__in_c rst_n_pad (
         `ifdef USE_POWER_PINS
         .DVDD   (VDD),
         .DVSS   (VSS),
@@ -195,31 +230,16 @@ module chip_top (
         .VSS    (VSS),
         `endif
     
-        .Y (clk_PAD2CORE),
-        .PAD (clk_PAD),
+        .Y      (rst_n_PAD2CORE),
+        .PAD    (rst_n_PAD),
         
-        .PU (1'b0),
-        .PD (1'b0)
-    );
-    
-    gf180mcu_fd_io__in_c gf180mcu_fd_io__in_c_rst_n (
-        `ifdef USE_POWER_PINS
-        .DVDD   (VDD),
-        .DVSS   (VSS),
-        .VDD    (VDD),
-        .VSS    (VSS),
-        `endif
-    
-        .Y (rst_n_PAD2CORE),
-        .PAD (rst_n_PAD),
-        
-        .PU (1'b0),
-        .PD (1'b0)
+        .PU     (1'b0),
+        .PD     (1'b0)
     );
 
     generate
-    for (genvar i=0; i<8; i++) begin : gf180mcu_fd_io__in_c_ui
-        gf180mcu_fd_io__in_c ui (
+    for (genvar i=0; i<NUM_INPUT; i++) begin : inputs
+        gf180mcu_fd_io__in_c pad (
             `ifdef USE_POWER_PINS
             .DVDD   (VDD),
             .DVSS   (VSS),
@@ -227,46 +247,18 @@ module chip_top (
             .VSS    (VSS),
             `endif
         
-            .Y (ui_PAD2CORE[i]),
-            .PAD (ui_PAD[i]),
+            .Y      (input_PAD2CORE[i]),
+            .PAD    (input_PAD[i]),
             
-            .PU (1'b0),
-            .PD (1'b0)
-        );
-    end
-    endgenerate
-
-    wire [7:0] unused_y;
-
-    generate
-    for (genvar i=0; i<8; i++) begin : gf180mcu_fd_io__bi_24t_uo
-        gf180mcu_fd_io__bi_24t uo (
-            `ifdef USE_POWER_PINS
-            .DVDD   (VDD),
-            .DVSS   (VSS),
-            .VDD    (VDD),
-            .VSS    (VSS),
-            `endif
-        
-            .A (uo_CORE2PAD[i]),
-            .PAD (uo_PAD[i]),
-            
-            .OE (1'b1),
-            .IE (1'b0),
-            .Y  (unused_y[i]),
-
-            .CS (1'b0), // cmos
-            .SL (unused_y[i]), // TODO so dumb, just for now...
-
-            .PU (1'b0),
-            .PD (1'b0)
+            .PU     (input_CORE2PAD_PU[i]),
+            .PD     (input_CORE2PAD_PD[i])
         );
     end
     endgenerate
 
     generate
-    for (genvar i=0; i<8; i++) begin : gf180mcu_fd_io__bi_24t_uio
-        gf180mcu_fd_io__bi_24t uio (
+    for (genvar i=0; i<NUM_BIDIR; i++) begin : bidir
+        gf180mcu_fd_io__bi_24t pad (
             `ifdef USE_POWER_PINS
             .DVDD   (VDD),
             .DVSS   (VSS),
@@ -274,17 +266,17 @@ module chip_top (
             .VSS    (VSS),
             `endif
         
-            .A      (uio_CORE2PAD[i]),
-            .OE     (uio_CORE2PAD_EN[i]),
-            .Y      (uio_PAD2CORE[i]),
-            .PAD    (uio_PAD[i]),
+            .A      (bidir_CORE2PAD[i]),
+            .OE     (bidir_CORE2PAD_OE[i]),
+            .Y      (bidir_PAD2CORE[i]),
+            .PAD    (bidir_PAD[i]),
             
-            .CS (1'b0), // cmos
-            .SL (1'b0), // fast
-            .IE (!uio_CORE2PAD_EN[i]),
+            .CS     (bidir_CORE2PAD_CS[i]),
+            .SL     (bidir_CORE2PAD_SL[i]),
+            .IE     (bidir_CORE2PAD_IE[i]),
 
-            .PU (1'b0),
-            .PD (1'b0)
+            .PU     (bidir_CORE2PAD_PU[i]),
+            .PD     (bidir_CORE2PAD_PD[i])
         );
     end
     endgenerate
@@ -292,14 +284,23 @@ module chip_top (
     // Core design
 
     (* keep *) chip_core i_chip_core (
-        .ui_in      (ui_PAD2CORE),
-        .uo_out     (uo_CORE2PAD),
-        .uio_in     (uio_PAD2CORE),
-        .uio_out    (uio_CORE2PAD),
-        .uio_oe     (uio_CORE2PAD_EN),
-        .ena        (ena_PAD2CORE),
         .clk        (clk_PAD2CORE),
-        .rst_n      (rst_n_PAD2CORE)
+        .rst_n      (rst_n_PAD2CORE),
+    
+        .input_in   (input_PAD2CORE),
+        .input_pu   (input_CORE2PAD_PU),
+        .input_pd   (input_CORE2PAD_PD),
+
+        .bidir_in   (bidir_PAD2CORE),
+        .bidir_out  (bidir_CORE2PAD),
+        .bidir_oe   (bidir_CORE2PAD_OE),
+        .bidir_cs   (bidir_CORE2PAD_CS),
+        .bidir_sl   (bidir_CORE2PAD_SL),
+        .bidir_ie   (bidir_CORE2PAD_IE),
+        .bidir_pu   (bidir_CORE2PAD_PU),
+        .bidir_pd   (bidir_CORE2PAD_PD)
     );
 
 endmodule
+
+`default_nettype wire

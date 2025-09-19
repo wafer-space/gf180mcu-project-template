@@ -37,68 +37,106 @@ VERILOG_FILES:
 PRIMARY_GDSII_STREAMOUT_TOOL: klayout
 
 # Specify the pad instances for the padring
-PAD_EAST: [
-    gf180mcu_ws_io__dvdd_east,
-    gf180mcu_ws_io__dvss_east,
-
-    "gf180mcu_fd_io__bi_24t_uio\\[0\\].uio",
-    "gf180mcu_fd_io__bi_24t_uio\\[1\\].uio",
-    "gf180mcu_fd_io__bi_24t_uio\\[2\\].uio",
-    "gf180mcu_fd_io__bi_24t_uio\\[3\\].uio",
-    "gf180mcu_fd_io__bi_24t_uio\\[4\\].uio",
-    "gf180mcu_fd_io__bi_24t_uio\\[5\\].uio",
-    "gf180mcu_fd_io__bi_24t_uio\\[6\\].uio",
-    "gf180mcu_fd_io__bi_24t_uio\\[7\\].uio",
-    
-    gf180mcu_ws_io__dvss_east2,
-    gf180mcu_ws_io__dvdd_east2
-]
-
 PAD_SOUTH: [
-    gf180mcu_fd_io__dvdd_south,
-    gf180mcu_fd_io__dvss_south,
-        
-    "gf180mcu_fd_io__bi_24t_uo\\[0\\].uo",
-    "gf180mcu_fd_io__bi_24t_uo\\[1\\].uo",
-    "gf180mcu_fd_io__bi_24t_uo\\[2\\].uo",
-    "gf180mcu_fd_io__bi_24t_uo\\[3\\].uo",
-    "gf180mcu_fd_io__bi_24t_uo\\[4\\].uo",
-    "gf180mcu_fd_io__bi_24t_uo\\[5\\].uo",
-    "gf180mcu_fd_io__bi_24t_uo\\[6\\].uo",
-    "gf180mcu_fd_io__bi_24t_uo\\[7\\].uo",
+    clk_pad,
+    rst_n_pad,
 
-    gf180mcu_fd_io__dvss_south2,
-    gf180mcu_fd_io__dvdd_south2
+    "bidir\\[0\\].pad",
+    "bidir\\[1\\].pad",
+    "bidir\\[2\\].pad",
+    "bidir\\[3\\].pad",
+    "bidir\\[4\\].pad",
+    "bidir\\[5\\].pad",
+
+    dvss_south_0,
+
+    "bidir\\[6\\].pad",
+    "bidir\\[7\\].pad",
+    "bidir\\[8\\].pad",
+    "bidir\\[9\\].pad",
+    "bidir\\[10\\].pad",
+    "bidir\\[11\\].pad",
+    "bidir\\[12\\].pad",
+    "bidir\\[13\\].pad"
 ]
 
-PAD_WEST: [
-    gf180mcu_ws_io__dvdd_west,
-    gf180mcu_ws_io__dvss_west,
+PAD_EAST: [
 
-    "gf180mcu_fd_io__in_c_ui\\[0\\].ui",
-    "gf180mcu_fd_io__in_c_ui\\[1\\].ui",
-    "gf180mcu_fd_io__in_c_ui\\[2\\].ui",
-    "gf180mcu_fd_io__in_c_ui\\[3\\].ui",
-    "gf180mcu_fd_io__in_c_ui\\[4\\].ui",
-    "gf180mcu_fd_io__in_c_ui\\[5\\].ui",
+    "bidir\\[14\\].pad",
+    "bidir\\[15\\].pad",
+
+    dvss_east_0,
+    dvdd_east_0,
+
+    "bidir\\[16\\].pad",
+    "bidir\\[17\\].pad",
+    "bidir\\[18\\].pad",
+    "bidir\\[19\\].pad",
     
-    gf180mcu_ws_io__dvss_west2,
-    gf180mcu_ws_io__dvdd_west2
+    dvss_east_1,
+    dvdd_east_1,
+    
+    "bidir\\[20\\].pad",
+    "bidir\\[21\\].pad",
+    "bidir\\[22\\].pad",
+    "bidir\\[23\\].pad",
+    "bidir\\[24\\].pad",
+    "bidir\\[25\\].pad",
+    
+    dvss_east_2,
+    dvdd_east_2,
+    dvss_east_3,
+    dvdd_east_3
 ]
 
 PAD_NORTH: [
-    gf180mcu_fd_io__dvdd_north,
-    gf180mcu_fd_io__dvss_north,
+    "bidir\\[41\\].pad",
+    "bidir\\[40\\].pad",
+    "bidir\\[39\\].pad",
+    "bidir\\[38\\].pad",
+    "bidir\\[37\\].pad",
+    "bidir\\[36\\].pad",
+    "bidir\\[35\\].pad",
+    "bidir\\[34\\].pad",
 
-    "gf180mcu_fd_io__in_c_ui\\[6\\].ui",
-    "gf180mcu_fd_io__in_c_ui\\[7\\].ui",
-    
-    gf180mcu_fd_io__in_c_ena,
-    gf180mcu_fd_io__in_s_clk,
-    gf180mcu_fd_io__in_c_rst_n,
-    
-    gf180mcu_fd_io__dvss_north2,
-    gf180mcu_fd_io__dvdd_north2
+    dvss_north_0,
+
+    "bidir\\[33\\].pad",
+    "bidir\\[32\\].pad",
+    "bidir\\[31\\].pad",
+    "bidir\\[30\\].pad",
+    "bidir\\[29\\].pad",
+    "bidir\\[28\\].pad",
+    "bidir\\[27\\].pad",
+    "bidir\\[26\\].pad"
+]
+
+
+PAD_WEST: [
+    dvdd_west_3,
+    dvss_west_3,
+    dvdd_west_2,
+    dvss_west_2,
+
+    "inputs\\[11\\].pad",
+    "inputs\\[10\\].pad",
+    "inputs\\[9\\].pad",
+    "inputs\\[8\\].pad",
+    "inputs\\[7\\].pad",
+    "inputs\\[6\\].pad",
+
+    dvss_west_1,
+    dvdd_west_1,
+
+    "inputs\\[5\\].pad",
+    "inputs\\[4\\].pad",
+    "inputs\\[3\\].pad",
+    "inputs\\[2\\].pad",
+    "inputs\\[1\\].pad",
+    "inputs\\[0\\].pad",
+
+    dvss_west_0,
+    dvdd_west_0
 ]
 
 # SDC files
