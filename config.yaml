@@ -1,0 +1,146 @@
+meta:
+  version: 2
+  flow: Classic
+  substituting_steps:
+    # Padring is used instead of pins
+    OpenROAD.IOPlacement: null
+    +Odb.SetPowerConnections: OpenROAD.Padring
+    
+    # Add the seal ring
+    +Checker.XOR: KLayout.SealRing
+    
+    # Run filler insertion
+    +KLayout.SealRing: KLayout.FillerGeneration
+    
+    # Check the density across the layers
+    +KLayout.FillerGeneration: KLayout.RunDensity
+    +KLayout.RunDensity: Checker.Density
+    
+    # Due to OpenROAD bug
+    # https://github.com/The-OpenROAD-Project/OpenROAD/issues/8229
+    OpenROAD.Repair*: null
+    
+    # Save time
+    #KLayout.DRC: null
+    #Magic.DRC: null
+    #KLayout.XOR: null
+    
+    Magic.WriteLEF: null # Not needed, save time
+    Odb.CheckDesignAntennaProperties: null # Requires LEF
+
+DESIGN_NAME: chip_top
+VERILOG_FILES:
+- dir::src/chip_top.sv
+- dir::src/chip_core.sv
+
+# Slightly smaller file sizes
+PRIMARY_GDSII_STREAMOUT_TOOL: klayout
+
+# Specify the pad instances for the padring
+PAD_EAST: [
+    gf180mcu_ws_io__dvdd_east,
+    gf180mcu_ws_io__dvss_east,
+
+    "gf180mcu_fd_io__bi_24t_uio\\[0\\].uio",
+    "gf180mcu_fd_io__bi_24t_uio\\[1\\].uio",
+    "gf180mcu_fd_io__bi_24t_uio\\[2\\].uio",
+    "gf180mcu_fd_io__bi_24t_uio\\[3\\].uio",
+    "gf180mcu_fd_io__bi_24t_uio\\[4\\].uio",
+    "gf180mcu_fd_io__bi_24t_uio\\[5\\].uio",
+    "gf180mcu_fd_io__bi_24t_uio\\[6\\].uio",
+    "gf180mcu_fd_io__bi_24t_uio\\[7\\].uio",
+    
+    gf180mcu_ws_io__dvss_east2,
+    gf180mcu_ws_io__dvdd_east2
+]
+
+PAD_SOUTH: [
+    gf180mcu_fd_io__dvdd_south,
+    gf180mcu_fd_io__dvss_south,
+        
+    "gf180mcu_fd_io__bi_24t_uo\\[0\\].uo",
+    "gf180mcu_fd_io__bi_24t_uo\\[1\\].uo",
+    "gf180mcu_fd_io__bi_24t_uo\\[2\\].uo",
+    "gf180mcu_fd_io__bi_24t_uo\\[3\\].uo",
+    "gf180mcu_fd_io__bi_24t_uo\\[4\\].uo",
+    "gf180mcu_fd_io__bi_24t_uo\\[5\\].uo",
+    "gf180mcu_fd_io__bi_24t_uo\\[6\\].uo",
+    "gf180mcu_fd_io__bi_24t_uo\\[7\\].uo",
+
+    gf180mcu_fd_io__dvss_south2,
+    gf180mcu_fd_io__dvdd_south2
+]
+
+PAD_WEST: [
+    gf180mcu_ws_io__dvdd_west,
+    gf180mcu_ws_io__dvss_west,
+
+    "gf180mcu_fd_io__in_c_ui\\[0\\].ui",
+    "gf180mcu_fd_io__in_c_ui\\[1\\].ui",
+    "gf180mcu_fd_io__in_c_ui\\[2\\].ui",
+    "gf180mcu_fd_io__in_c_ui\\[3\\].ui",
+    "gf180mcu_fd_io__in_c_ui\\[4\\].ui",
+    "gf180mcu_fd_io__in_c_ui\\[5\\].ui",
+    
+    gf180mcu_ws_io__dvss_west2,
+    gf180mcu_ws_io__dvdd_west2
+]
+
+PAD_NORTH: [
+    gf180mcu_fd_io__dvdd_north,
+    gf180mcu_fd_io__dvss_north,
+
+    "gf180mcu_fd_io__in_c_ui\\[6\\].ui",
+    "gf180mcu_fd_io__in_c_ui\\[7\\].ui",
+    
+    gf180mcu_fd_io__in_c_ena,
+    gf180mcu_fd_io__in_s_clk,
+    gf180mcu_fd_io__in_c_rst_n,
+    
+    gf180mcu_fd_io__dvss_north2,
+    gf180mcu_fd_io__dvdd_north2
+]
+
+# SDC files
+PNR_SDC_FILE: dir::constraint.sdc
+SIGNOFF_SDC_FILE: dir::constraint.sdc
+FALLBACK_SDC: dir::constraint.sdc
+
+# Power / ground nets
+VDD_NETS:
+- VDD
+GND_NETS:
+- VSS
+
+# We need to add gf180mcu_fd_io__bi_24t
+# due to the unused Y output for output only pads
+IGNORE_DISCONNECTED_MODULES:
+- gf180mcu_fd_io__bi_24t
+
+# Clock
+CLOCK_PORT: clock
+CLOCK_PERIOD: 20
+
+# Floorplanning
+FP_SIZING: absolute
+# 3880umx5070um + 25um seal ring
+DIE_AREA: [0, 0, 3905, 5095]
+CORE_AREA: [440, 440, 3465, 4655]
+
+PL_TARGET_DENSITY_PCT: 30
+GRT_ALLOW_CONGESTION: true
+
+# PDN
+PDN_CORE_RING: True
+# Maximum metal width without slotting: 30um
+PDN_CORE_RING_VWIDTH: 25
+PDN_CORE_RING_HWIDTH: 25
+PDN_CORE_RING_CONNECT_TO_PADS: True
+PDN_ENABLE_PINS: False
+PDN_CORE_VERTICAL_LAYER: Metal2
+PDN_CORE_HORIZONTAL_LAYER: Metal3
+
+# Due to OpenROAD bug
+# https://github.com/The-OpenROAD-Project/OpenROAD/issues/8229
+PL_TIME_DRIVEN: False
+#PL_ROUTABILITY_DRIVEN: False
