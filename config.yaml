@@ -61,20 +61,19 @@ PAD_SOUTH: [
 ]
 
 PAD_EAST: [
+    dvdd_east_0,
+    dvss_east_0,
 
     "bidir\\[14\\].pad",
     "bidir\\[15\\].pad",
-
-    dvss_east_0,
-    dvdd_east_0,
-
     "bidir\\[16\\].pad",
     "bidir\\[17\\].pad",
     "bidir\\[18\\].pad",
     "bidir\\[19\\].pad",
     
-    dvss_east_1,
     dvdd_east_1,
+    dvss_east_1,
+
     
     "bidir\\[20\\].pad",
     "bidir\\[21\\].pad",
@@ -125,18 +124,19 @@ PAD_WEST: [
     "inputs\\[7\\].pad",
     "inputs\\[6\\].pad",
 
-    dvss_west_1,
     dvdd_west_1,
+    dvss_west_1,
 
     "inputs\\[5\\].pad",
     "inputs\\[4\\].pad",
     "inputs\\[3\\].pad",
     "inputs\\[2\\].pad",
-    "inputs\\[1\\].pad",
-    "inputs\\[0\\].pad",
 
+    dvdd_west_0,
     dvss_west_0,
-    dvdd_west_0
+    
+    "inputs\\[1\\].pad",
+    "inputs\\[0\\].pad"
 ]
 
 # SDC files
@@ -161,9 +161,9 @@ CLOCK_PERIOD: 20
 
 # Floorplanning
 FP_SIZING: absolute
-# 3880umx5070um + 25um seal ring
-DIE_AREA: [0, 0, 3905, 5095]
-CORE_AREA: [440, 440, 3465, 4655]
+# 3880umx5070um + 2*25um for seal ring
+DIE_AREA: [0, 0, 3930, 5120]
+CORE_AREA: [440, 440, 3490, 4680]
 
 PL_TARGET_DENSITY_PCT: 30
 GRT_ALLOW_CONGESTION: true
