@@ -182,3 +182,7 @@ PDN_CORE_HORIZONTAL_LAYER: Metal3
 # https://github.com/The-OpenROAD-Project/OpenROAD/issues/8229
 PL_TIME_DRIVEN: False
 #PL_ROUTABILITY_DRIVEN: False
+
+# Prevent false positive DRC errors in I/O cells
+MAGIC_GDS_FLATGLOB:
+- "*_CDNS_*"
