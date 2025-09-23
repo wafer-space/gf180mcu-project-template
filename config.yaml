@@ -186,3 +186,6 @@ PL_TIME_DRIVEN: False
 # Prevent false positive DRC errors in I/O cells
 MAGIC_GDS_FLATGLOB:
 - "*_CDNS_*"
+
+# Enable plugin for better SystemVerilog support
+# USE_SLANG: True
