@@ -25,7 +25,6 @@ set_input_delay 8 -clock clk_core $clk_core_inout_ports
 set_output_delay 8 -clock clk_core $clk_core_inout_ports
 
 set clk_core_input_ports [get_ports { 
-    ena_PAD
     rst_n_PAD
 	input_PAD[.*]
 }] 
