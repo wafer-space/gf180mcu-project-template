@@ -22,12 +22,17 @@
     nixpkgs = nix-eda.inputs.nixpkgs;
     lib = nixpkgs.lib;
   in {
+    overlays = {
+      default = lib.composeManyExtensions [
+        (import ./nix/overlay.nix)
+      ];
+    };
     # Outputs
     legacyPackages = nix-eda.forAllSystems (
       system:
         import nixpkgs {
           inherit system;
-          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default];
+          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default self.overlays.default];
         }
     );
     
@@ -38,7 +43,22 @@
     devShells = nix-eda.forAllSystems (system: let
       pkgs = (self.legacyPackages.${system});
     in {
-      default = lib.callPackageWith pkgs (librelane.createOpenLaneShell {}) {};
+      default = lib.callPackageWith pkgs (librelane.createOpenLaneShell {
+        extra-packages = with pkgs; [
+          # Simulation
+          iverilog
+          verilator
+          
+          # Waveform viewing
+          gtkwave
+          surfer
+        ];
+        
+        extra-python-packages = with pkgs.python3.pkgs; (pkgs.lib.optionals pkgs.stdenv.isLinux [
+          # Verification
+          cocotb
+        ]);
+      }) {};
     });
   };
 }
