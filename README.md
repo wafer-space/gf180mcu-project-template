@@ -15,14 +15,14 @@ Next, install LibreLane by following the Nix based installation instructions: ht
 
 ## Implement the Design
 
-This repository contains a Nix Flake that enables a shell with the [`leo/gf180mcu`](https://github.com/librelane/librelane/tree/leo/gf180mcu) branch of LibreLane.
+This repository contains a Nix Flake that provides a shell with the [`leo/gf180mcu`](https://github.com/librelane/librelane/tree/leo/gf180mcu) branch of LibreLane.
 
 Simply run `nix-shell` in the root of this repository.
 
 > [!NOTE]
-> Since we are working on a branch of LibreLane, OpenROAD needs to be compiled locally. This will be done automatically by Nix and the binary is cached locally. 
+> Since we are working on a branch of LibreLane, OpenROAD needs to be compiled locally. This will be done automatically by Nix, and the binary will be cached locally. 
 
-With this shell run the implementation:
+With this shell enabled, run the implementation:
 
 ```
 make librelane
@@ -30,7 +30,7 @@ make librelane
 
 ## View the Design
 
-After completion you can view the design with OpenROAD GUI:
+After completion, you can view the design uisng the OpenROAD GUI:
 
 ```
 make librelane-openroad
@@ -42,12 +42,34 @@ Or using KLayout:
 make librelane-klayout
 ```
 
-# Copying the Design
+## Copying the Design to the Final Folder
 
-Top copy your last run to `final/` in the root directory of the repository, run:
+To copy your latest run to the `final/` folder in the root directory of the repository, run the following command:
 
 ```
 make copy-final
 ```
 
-This will only work if the last run completed without errors.
+This will only work if the last run was completed without errors.
+
+## Verification and Simulation
+
+We use [cocotb](https://www.cocotb.org/), a Python-based testbench environment, for the verification of the chip.
+The underlying simulator is Icarus Verilog (https://github.com/steveicarus/iverilog).
+
+The testbench is located in `cocotb/chip_top_tb.py`. To run the RTL simulation, simply call the testbench:
+
+```
+python3 chip_top_tb.py
+```
+
+To run the GL (gate-level) simulation, set the GL environment variable:
+
+```
+GL=1 python3 chip_top_tb.py
+```
+
+> [!NOTE]
+> You need to have the latest implementation of your design in the `final/` folder. After implementing the design, execute 'make copy-final' to copy all necessary files.
+
+You can now update the testbench according to your design.
