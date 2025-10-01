@@ -283,7 +283,10 @@ module chip_top #(
 
     // Core design
 
-    (* keep *) chip_core i_chip_core (
+    (* keep *) chip_core #(
+        .NUM_INPUT  (NUM_INPUT),
+        .NUM_BIDIR  (NUM_BIDIR)
+    ) i_chip_core (
         .clk        (clk_PAD2CORE),
         .rst_n      (rst_n_PAD2CORE),
     
