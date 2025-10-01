@@ -18,20 +18,32 @@ meta:
     
     # Due to OpenROAD bug
     # https://github.com/The-OpenROAD-Project/OpenROAD/issues/8229
-    OpenROAD.Repair*: null
+    #TODO OpenROAD.Repair*: null
+    
+    # Not supported for gf180mcu
+    KLayout.DRC: null
+    Checker.KLayoutDRC: null
     
     # Save time
-    #KLayout.DRC: null
+    #OpenROAD.IRDropReport: null
     #Magic.DRC: null
+    #Checker.MagicDRC: null
     #KLayout.XOR: null
+    
+    # Stuck, need to investigate...
+    #Netgen.LVS: null
+    #Checker.LVS: null
     
     Magic.WriteLEF: null # Not needed, save time
     Odb.CheckDesignAntennaProperties: null # Requires LEF
 
 DESIGN_NAME: chip_top
 VERILOG_FILES:
-- dir::src/chip_top.sv
-- dir::src/chip_core.sv
+- dir::../src/chip_top.sv
+- dir::../src/chip_core.sv
+
+# Enable plugin for better SystemVerilog support
+# USE_SLANG: True
 
 # Slightly smaller file sizes
 PRIMARY_GDSII_STREAMOUT_TOOL: klayout
@@ -156,16 +168,19 @@ IGNORE_DISCONNECTED_MODULES:
 - gf180mcu_fd_io__bi_24t
 
 # Clock
-CLOCK_PORT: clock
+CLOCK_PORT: clk_PAD
 CLOCK_PERIOD: 20
 
 # Floorplanning
 FP_SIZING: absolute
-# 3880umx5070um + 2*25um for seal ring
-DIE_AREA: [0, 0, 3930, 5120]
-CORE_AREA: [440, 440, 3490, 4680]
+# 3880umx5070um including 26um
+# for the sealring on all sides
+DIE_AREA: [0, 0, 3932, 5122]
+CORE_AREA: [442, 442, 3490, 4680]
 
-PL_TARGET_DENSITY_PCT: 30
+# Increase for more logic
+# on your die
+PL_TARGET_DENSITY_PCT: 20
 GRT_ALLOW_CONGESTION: true
 
 # PDN
@@ -180,12 +195,20 @@ PDN_CORE_HORIZONTAL_LAYER: Metal3
 
 # Due to OpenROAD bug
 # https://github.com/The-OpenROAD-Project/OpenROAD/issues/8229
-PL_TIME_DRIVEN: False
+#PL_TIME_DRIVEN: False
 #PL_ROUTABILITY_DRIVEN: False
 
 # Prevent false positive DRC errors in I/O cells
 MAGIC_GDS_FLATGLOB:
+# For contacts
 - "*_CDNS_*"
+# COMP and Poly2 filler cells need to be 
+# flattened to form a "filltrans" layer
+- "COMP_fill_cell"
+- "Poly2_fill_cell"
 
-# Enable plugin for better SystemVerilog support
-# USE_SLANG: True
+# Because we have multiple power pads for one power domain
+MAGIC_EXT_UNIQUE: notopports
+
+# There's one (false) error during streamout
+MAGIC_CAPTURE_ERRORS: False

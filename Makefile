@@ -1,6 +1,6 @@
 MAKEFILE_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 
-RUN_TAG = $(shell ls runs/ | tail -n 1)
+RUN_TAG = $(shell ls librelane/runs/ | tail -n 1)
 TOP = chip_top
 
 PDK_ROOT ?= $(MAKEFILE_DIR)/gf180mcu
@@ -15,17 +15,30 @@ clone-pdk:
 .PHONY: clone-pdk
 
 librelane:
-	librelane config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk
+	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk
 .PHONY: librelane
 
 librelane-openroad:
-	librelane config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --last-run --flow OpenInOpenROAD
+	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --last-run --flow OpenInOpenROAD
 .PHONY: librelane-openroad
 
 librelane-klayout:
-	librelane config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --last-run --flow OpenInKLayout
+	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --last-run --flow OpenInKLayout
 .PHONY: librelane-klayout
 
+sim:
+	cd cocotb; PDK_ROOT=${PDK_ROOT} PDK=${PDK} python3 chip_top_tb.py
+.PHONY: sim
+
+sim-gl:
+	cd cocotb; GL=1 PDK_ROOT=${PDK_ROOT} PDK=${PDK} python3 chip_top_tb.py
+.PHONY: sim-gl
+
+sim-view:
+	gtkwave cocotb/sim_build/chip_top.fst
+.PHONY: sim-view
+
 copy-final:
-	cp runs/${RUN_TAG}/final/ final/
+	rm -rf final/
+	cp -r librelane/runs/${RUN_TAG}/final/ final/
 .PHONY: copy-final

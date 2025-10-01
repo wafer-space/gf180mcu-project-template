@@ -1,6 +1,6 @@
 # gf180mcu Project Template
 
-Project template for wafer.space MPW runs using the gf180mcu PDK
+Project template for wafer.space MPW runs using the gf180mcu PDK.
 
 > [!CAUTION]
 > This repository is still WIP.
@@ -27,6 +27,9 @@ With this shell enabled, run the implementation:
 ```
 make librelane
 ```
+
+> [!NOTE]
+> For more comprehensive SystemVerilog support, enable the USE_SLANG variable in the LibreLane configuration.
 
 ## View the Design
 
@@ -63,13 +66,42 @@ The testbench is located in `cocotb/chip_top_tb.py`. To run the RTL simulation, 
 python3 chip_top_tb.py
 ```
 
+or
+
+```
+make sim
+```
+
 To run the GL (gate-level) simulation, set the GL environment variable:
 
 ```
 GL=1 python3 chip_top_tb.py
 ```
 
+or
+
+```
+make sim-gl
+```
+
 > [!NOTE]
 > You need to have the latest implementation of your design in the `final/` folder. After implementing the design, execute 'make copy-final' to copy all necessary files.
 
+In both cases, a waveform file will be generated under `cocotb/sim_build/chip_top.fst`.
+You can view it using a waveform viewer, for example, [GTKWave](https://gtkwave.github.io/gtkwave/).
+
+```
+gtkwave cocotb/sim_build/chip_top.fst
+```
+
+or
+
+```
+make sim-view
+```
+
 You can now update the testbench according to your design.
+
+## Precheck
+
+To check whether your design is suitable for manufacturing, run the [gf180mcu-precheck](https://github.com/wafer-space/gf180mcu-precheck) with your layout.
