@@ -9,7 +9,11 @@
   };
 
   inputs = {
-    librelane.url = github:librelane/librelane/leo/gf180mcu;
+    nix-eda.url = "github:fossi-foundation/nix-eda";
+    librelane = {
+      url = "github:librelane/librelane/leo/gf180mcu";
+      inputs.nix-eda.follows = "nix-eda";
+    };
   };
 
   outputs = {
@@ -22,17 +26,12 @@
     nixpkgs = nix-eda.inputs.nixpkgs;
     lib = nixpkgs.lib;
   in {
-    overlays = {
-      default = lib.composeManyExtensions [
-        (import ./nix/overlay.nix)
-      ];
-    };
     # Outputs
     legacyPackages = nix-eda.forAllSystems (
       system:
         import nixpkgs {
           inherit system;
-          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default self.overlays.default];
+          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default];
         }
     );
     

@@ -62,7 +62,9 @@
         "ciel": "ciel",
         "devshell": "devshell",
         "flake-compat": "flake-compat",
-        "nix-eda": "nix-eda"
+        "nix-eda": [
+          "nix-eda"
+        ]
       },
       "locked": {
         "lastModified": 1758551033,
@@ -84,16 +86,15 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1754134233,
-        "narHash": "sha256-RFApbuRqOG4ybeXg7TjUxtpaCGNAbU/8TqQ96Yxo/R0=",
+        "lastModified": 1759301820,
+        "narHash": "sha256-49cIg/cKsSUjUNkBZBAVPHhG9SgvjlLQ+YFyYhNs2a0=",
         "owner": "fossi-foundation",
         "repo": "nix-eda",
-        "rev": "5908d9dbe2c94486926787dfe33ddfdc21863b60",
+        "rev": "c4b3ed3fad94c8bb5cceaf28b715dc775e207cab",
         "type": "github"
       },
       "original": {
         "owner": "fossi-foundation",
-        "ref": "5.3.0",
         "repo": "nix-eda",
         "type": "github"
       }
@@ -116,7 +117,8 @@
     },
     "root": {
       "inputs": {
-        "librelane": "librelane"
+        "librelane": "librelane",
+        "nix-eda": "nix-eda"
       }
     }
   },
