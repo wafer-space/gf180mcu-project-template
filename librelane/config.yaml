@@ -180,7 +180,7 @@ CORE_AREA: [442, 442, 3490, 4680]
 
 # Increase for more logic
 # on your die
-PL_TARGET_DENSITY_PCT: 20
+PL_TARGET_DENSITY_PCT: 35
 GRT_ALLOW_CONGESTION: true
 
 # PDN
@@ -210,5 +210,15 @@ MAGIC_GDS_FLATGLOB:
 # Because we have multiple power pads for one power domain
 MAGIC_EXT_UNIQUE: notopports
 
-# There's one (false) error during streamout
-MAGIC_CAPTURE_ERRORS: False
+#MACROS:
+#  gf180mcu_ws_ip__id:
+#    gds:
+#      - dir::../ip/gf180mcu_ws_ip__id/gds/gf180mcu_ws_ip__id.gds
+#    lef:
+#      - dir::../ip/gf180mcu_ws_ip__id/lef/gf180mcu_ws_ip__id.lef
+#    nl:
+#      - dir::../ip/gf180mcu_ws_ip__id/rtl/gf180mcu_ws_ip__id.v
+#    instances:
+#      die_id:
+#        location: [26, 26]
+#        orientation: N
