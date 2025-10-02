@@ -2,20 +2,17 @@
 
 Project template for wafer.space MPW runs using the gf180mcu PDK.
 
-> [!CAUTION]
-> This repository is still WIP.
-
 ## Prerequisites
 
-For now we use a custom repository for the PDK until all changes are upstreamed.
+We use a custom fork of the [gf180mcuD PDK variant](https://github.com/wafer-space/gf180mcu) until all changes have been upstreamed.
 
-Simply run `make clone-pdk` to clone the correct PDK version.
+To clone the latest PDK version, simply run `make clone-pdk`.
 
-Next, install LibreLane by following the Nix based installation instructions: https://librelane.readthedocs.io/en/latest/getting_started/common/nix_installation/index.html
+In the next step, install LibreLane by following the Nix-based installation instructions: https://librelane.readthedocs.io/en/latest/getting_started/common/nix_installation/index.html
 
 ## Implement the Design
 
-This repository contains a Nix Flake that provides a shell with the [`leo/gf180mcu`](https://github.com/librelane/librelane/tree/leo/gf180mcu) branch of LibreLane.
+This repository contains a Nix flake that provides a shell with the [`leo/gf180mcu`](https://github.com/librelane/librelane/tree/leo/gf180mcu) branch of LibreLane.
 
 Simply run `nix-shell` in the root of this repository.
 
@@ -60,25 +57,13 @@ This will only work if the last run was completed without errors.
 We use [cocotb](https://www.cocotb.org/), a Python-based testbench environment, for the verification of the chip.
 The underlying simulator is Icarus Verilog (https://github.com/steveicarus/iverilog).
 
-The testbench is located in `cocotb/chip_top_tb.py`. To run the RTL simulation, simply call the testbench:
-
-```
-python3 chip_top_tb.py
-```
-
-or
+The testbench is located in `cocotb/chip_top_tb.py`. To run the RTL simulation, run the following command:
 
 ```
 make sim
 ```
 
-To run the GL (gate-level) simulation, set the GL environment variable:
-
-```
-GL=1 python3 chip_top_tb.py
-```
-
-or
+To run the GL (gate-level) simulation, run the following command:
 
 ```
 make sim-gl
@@ -89,12 +74,6 @@ make sim-gl
 
 In both cases, a waveform file will be generated under `cocotb/sim_build/chip_top.fst`.
 You can view it using a waveform viewer, for example, [GTKWave](https://gtkwave.github.io/gtkwave/).
-
-```
-gtkwave cocotb/sim_build/chip_top.fst
-```
-
-or
 
 ```
 make sim-view
