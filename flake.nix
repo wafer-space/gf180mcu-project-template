@@ -53,10 +53,10 @@
           surfer
         ];
         
-        extra-python-packages = with pkgs.python3.pkgs; (pkgs.lib.optionals pkgs.stdenv.isLinux [
+        extra-python-packages = with pkgs.python3.pkgs; [
           # Verification
           cocotb
-        ]);
+        ];
       }) {};
     });
   };
