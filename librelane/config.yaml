@@ -29,8 +29,6 @@ meta:
     #Magic.DRC: null
     #Checker.MagicDRC: null
     #KLayout.XOR: null
-    
-    # Stuck, need to investigate...
     #Netgen.LVS: null
     #Checker.LVS: null
     
@@ -210,15 +208,25 @@ MAGIC_GDS_FLATGLOB:
 # Because we have multiple power pads for one power domain
 MAGIC_EXT_UNIQUE: notopports
 
-#MACROS:
-#  gf180mcu_ws_ip__id:
-#    gds:
-#      - dir::../ip/gf180mcu_ws_ip__id/gds/gf180mcu_ws_ip__id.gds
-#    lef:
-#      - dir::../ip/gf180mcu_ws_ip__id/lef/gf180mcu_ws_ip__id.lef
-#    nl:
-#      - dir::../ip/gf180mcu_ws_ip__id/rtl/gf180mcu_ws_ip__id.v
-#    instances:
-#      die_id:
-#        location: [26, 26]
-#        orientation: N
+MACROS:
+  gf180mcu_ws_ip__id:
+    gds:
+      - dir::../ip/gf180mcu_ws_ip__id/gds/gf180mcu_ws_ip__id.gds
+    lef:
+      - dir::../ip/gf180mcu_ws_ip__id/lef/gf180mcu_ws_ip__id.lef
+    nl:
+      - dir::../ip/gf180mcu_ws_ip__id/rtl/gf180mcu_ws_ip__id.v
+    instances:
+      die_id:
+        location: [26, 26]
+        orientation: N
+
+# Make sure netgen doesn't create 'no_connect' nets
+# Not needed since netgen 1.5.303
+LVS_FLATTEN_CELLS:
+- gf180mcu_ws_ip__id
+
+# gf180mcu_ws_ip__id has no ports and components
+# therefore make it an abstract cell in the layout
+MAGIC_EXT_ABSTRACT_CELLS:
+- gf180mcu_ws_ip__id
