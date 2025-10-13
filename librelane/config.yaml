@@ -150,9 +150,9 @@ PAD_WEST: [
 ]
 
 # SDC files
-PNR_SDC_FILE: dir::constraint.sdc
-SIGNOFF_SDC_FILE: dir::constraint.sdc
-FALLBACK_SDC: dir::constraint.sdc
+PNR_SDC_FILE: dir::chip_top.sdc
+SIGNOFF_SDC_FILE: dir::chip_top.sdc
+FALLBACK_SDC: dir::chip_top.sdc
 
 # Power / ground nets
 VDD_NETS:
@@ -167,6 +167,8 @@ IGNORE_DISCONNECTED_MODULES:
 
 # Clock
 CLOCK_PORT: clk_PAD
+CLOCK_NET: clk_pad/Y
+
 CLOCK_PERIOD: 20
 
 # Floorplanning
