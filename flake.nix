@@ -56,6 +56,9 @@
         extra-python-packages = with pkgs.python3.pkgs; [
           # Verification
           cocotb
+          
+          # For KLayout Python DRC runner
+          docopt
         ];
       }) {};
     });
