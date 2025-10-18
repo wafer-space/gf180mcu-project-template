@@ -216,19 +216,39 @@ MACROS:
       - dir::../ip/gf180mcu_ws_ip__id/gds/gf180mcu_ws_ip__id.gds
     lef:
       - dir::../ip/gf180mcu_ws_ip__id/lef/gf180mcu_ws_ip__id.lef
-    nl:
-      - dir::../ip/gf180mcu_ws_ip__id/rtl/gf180mcu_ws_ip__id.v
+    vh:
+      - dir::../ip/gf180mcu_ws_ip__id/vh/gf180mcu_ws_ip__id.v
+    lib:
+      "*":
+        - dir::../ip/gf180mcu_ws_ip__id/lib/gf180mcu_ws_ip__id.lib
     instances:
-      die_id:
+      chip_id:
         location: [26, 26]
+        orientation: N
+
+  gf180mcu_ws_ip__logo:
+    gds:
+      - dir::../ip/gf180mcu_ws_ip__logo/gds/gf180mcu_ws_ip__logo.gds
+    lef:
+      - dir::../ip/gf180mcu_ws_ip__logo/lef/gf180mcu_ws_ip__logo.lef
+    vh:
+      - dir::../ip/gf180mcu_ws_ip__logo/vh/gf180mcu_ws_ip__logo.v
+    lib:
+      "*":
+        - dir::../ip/gf180mcu_ws_ip__logo/lib/gf180mcu_ws_ip__logo.lib
+    instances:
+      wafer_space_logo:
+        location: [3762.75, 4952.75]
         orientation: N
 
 # Make sure netgen doesn't create 'no_connect' nets
 # Not needed since netgen 1.5.303
 LVS_FLATTEN_CELLS:
 - gf180mcu_ws_ip__id
+- gf180mcu_ws_ip__logo
 
 # gf180mcu_ws_ip__id has no ports and components
 # therefore make it an abstract cell in the layout
 MAGIC_EXT_ABSTRACT_CELLS:
 - gf180mcu_ws_ip__id
+- gf180mcu_ws_ip__logo

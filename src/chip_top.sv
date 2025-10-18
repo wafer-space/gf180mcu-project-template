@@ -304,9 +304,13 @@ module chip_top #(
         .bidir_pd   (bidir_CORE2PAD_PD)
     );
     
-    // Die ID - do not remove, necessary for tapeout
+    // Chip ID - do not remove, necessary for tapeout
     (* keep *)
-    gf180mcu_ws_ip__id die_id ();
+    gf180mcu_ws_ip__id chip_id ();
+    
+    // wafer.space logo - can be removed
+    (* keep *)
+    gf180mcu_ws_ip__logo wafer_space_logo ();
 
 endmodule
 

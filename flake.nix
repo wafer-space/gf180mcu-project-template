@@ -59,6 +59,9 @@
           
           # For KLayout Python DRC runner
           docopt
+          
+          # For logo generation
+          pillow
         ];
       }) {};
     });
