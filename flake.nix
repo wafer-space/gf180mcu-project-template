@@ -44,6 +44,11 @@
     in {
       default = lib.callPackageWith pkgs (librelane.createOpenLaneShell {
         extra-packages = with pkgs; [
+          # Utilities
+          gnumake
+          gnugrep
+          gawk
+          
           # Simulation
           iverilog
           verilator
