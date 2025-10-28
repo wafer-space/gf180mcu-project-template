@@ -1,29 +1,20 @@
 meta:
-  version: 2
-  flow: Classic
+  version: 3
+  flow: Chip
   substituting_steps:
-    # Padring is used instead of pins
-    OpenROAD.IOPlacement: null
-    +Odb.SetPowerConnections: OpenROAD.Padring
-    
-    # Add the seal ring
-    +Checker.XOR: KLayout.SealRing
-    
-    # Run filler insertion
-    +KLayout.SealRing: KLayout.FillerGeneration
-    
-    # Check the density across the layers
-    +KLayout.FillerGeneration: KLayout.RunDensity
-    +KLayout.RunDensity: Checker.Density
-    
-    # Due to OpenROAD bug
-    # https://github.com/The-OpenROAD-Project/OpenROAD/issues/8229
-    #TODO OpenROAD.Repair*: null
-    
-    # Not supported for gf180mcu
+
+    # Disable KLayout DRC
     KLayout.DRC: null
     Checker.KLayoutDRC: null
-    
+
+    # Disable KLayout antenna check
+    KLayout.Antenna: null
+    Checker.KLayoutAntenna: null
+
+    # Disable KLayout density check
+    #KLayout.Density: null
+    #Checker.KLayoutDensity: null
+
     # Save time
     #OpenROAD.IRDropReport: null
     #Magic.DRC: null
@@ -31,9 +22,6 @@ meta:
     #KLayout.XOR: null
     #Netgen.LVS: null
     #Checker.LVS: null
-    
-    Magic.WriteLEF: null # Not needed, save time
-    Odb.CheckDesignAntennaProperties: null # Requires LEF
 
 DESIGN_NAME: chip_top
 VERILOG_FILES:
@@ -164,6 +152,8 @@ GND_NETS:
 # due to the unused Y output for output only pads
 IGNORE_DISCONNECTED_MODULES:
 - gf180mcu_fd_io__bi_24t
+- gf180mcu_ws_ip__id
+- gf180mcu_ws_ip__logo
 
 # Clock
 CLOCK_PORT: clk_PAD

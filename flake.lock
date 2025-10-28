@@ -67,11 +67,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1760689637,
-        "narHash": "sha256-zLDzskkef8O2ZBEqKYoaUegGknwp6EhcuHR5pXwSyn8=",
+        "lastModified": 1761677319,
+        "narHash": "sha256-HRub2AzLsV/kAL4BwmZ6cSQU136emZv+Tg6S2000tl4=",
         "owner": "librelane",
         "repo": "librelane",
-        "rev": "526dbb27722a3b104cb8499357701344bea45a5b",
+        "rev": "d851125643f17c0ed7f6469662f2083f1b8b57c7",
         "type": "github"
       },
       "original": {
@@ -86,15 +86,16 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1759413531,
-        "narHash": "sha256-SZA2mxB0NXv4Elq/GrnOW2Aif41MwALpA9j1ib3XzOg=",
+        "lastModified": 1761673346,
+        "narHash": "sha256-PzFmRugzcY4dYVVqzPEK2vu/rwOkZpQo+P1MZYrh6ds=",
         "owner": "fossi-foundation",
         "repo": "nix-eda",
-        "rev": "d8e884cd9198ffb1e545f2b66673db83f3ce08a1",
+        "rev": "73a67c4d664814d242e1fb93086f5895b81c87c4",
         "type": "github"
       },
       "original": {
         "owner": "fossi-foundation",
+        "ref": "5.6.0",
         "repo": "nix-eda",
         "type": "github"
       }
