@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: © 2025 wafer.space
+// SPDX-FileCopyrightText: © 2025 Project Template Contributors
 // SPDX-License-Identifier: Apache-2.0
 
 `default_nettype none
