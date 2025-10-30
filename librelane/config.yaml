@@ -4,8 +4,8 @@ meta:
   substituting_steps:
 
     # Disable KLayout DRC
-    KLayout.DRC: null
-    Checker.KLayoutDRC: null
+    #KLayout.DRC: null
+    #Checker.KLayoutDRC: null
 
     # Disable KLayout antenna check
     KLayout.Antenna: null

@@ -9,7 +9,7 @@
   };
 
   inputs = {
-    nix-eda.url = "github:fossi-foundation/nix-eda/5.6.0";
+    nix-eda.url = "github:fossi-foundation/nix-eda/5.7.0";
     librelane = {
       url = "github:librelane/librelane/leo/gf180mcu";
       inputs.nix-eda.follows = "nix-eda";
@@ -31,12 +31,7 @@
       system:
         import nixpkgs {
           inherit system;
-          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default (final: prev: {
-                magic = prev.magic.override {
-                version = "8.3.559";
-                sha256 = "sha256-c9gmLW1ZXxTxPcJHXwtMEVin5TZs+MTYmOu5b2Irffk=";
-                };
-            })];
+          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default];
         }
     );
     

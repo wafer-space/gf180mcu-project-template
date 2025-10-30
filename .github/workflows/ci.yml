@@ -69,7 +69,7 @@ jobs:
         with:
           flakes-from-devshell: true
           script: |
-            make librelane
+            make librelane-nodrc
             make copy-final
       - name: Run GL simulation
         uses: workflow/nix-shell-action@v3.4.0
