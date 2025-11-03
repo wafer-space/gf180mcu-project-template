@@ -8,7 +8,7 @@ We use a custom fork of the [gf180mcuD PDK variant](https://github.com/wafer-spa
 
 To clone the latest PDK version, simply run `make clone-pdk`.
 
-In the next step, install LibreLane by following the Nix-based installation instructions: https://librelane.readthedocs.io/en/latest/getting_started/common/nix_installation/index.html
+In the next step, install LibreLane by following the Nix-based installation instructions: https://librelane.readthedocs.io/en/latest/installation/nix_installation/index.html
 
 ## Implement the Design
 
