@@ -31,6 +31,14 @@ librelane-nodrc: ## Run LibreLane flow without DRC checks
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --skip KLayout.DRC --skip Magic.DRC
 .PHONY: librelane-nodrc
 
+librelane-klayoutdrc: ## Run LibreLane flow without magic DRC checks
+	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --skip Magic.DRC
+.PHONY: librelane-klayoutdrc
+
+librelane-magicdrc: ## Run LibreLane flow without KLayout DRC checks
+	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --skip KLayout.DRC
+.PHONY: librelane-magicdrc
+
 librelane-openroad: ## Open the last run in OpenROAD
 	librelane librelane/config.yaml --pdk ${PDK} --pdk-root ${PDK_ROOT} --manual-pdk --last-run --flow OpenInOpenROAD
 .PHONY: librelane-openroad
