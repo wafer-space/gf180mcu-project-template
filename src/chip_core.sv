@@ -45,6 +45,9 @@ module chip_core #(
     assign bidir_ie = ~bidir_oe;
     assign bidir_pu = '0;
     assign bidir_pd = '0;
+    
+    logic _unused;
+    assign _unused = &bidir_in;
 
     logic [NUM_BIDIR_PADS-1:0] count;
 
@@ -52,7 +55,7 @@ module chip_core #(
         if (!rst_n) begin
             count <= '0;
         end else begin
-            if (&input_in && &bidir_in) begin
+            if (&input_in) begin
                 count <= count + 1;
             end
         end
@@ -94,7 +97,7 @@ module chip_core #(
         .Q    (sram_1_out)
     );
 
-    assign bidir_out  = count ^ {24'd0, sram_0_out, sram_1_out};
+    assign bidir_out = count ^ {24'd0, sram_0_out, sram_1_out};
 
 endmodule
 
