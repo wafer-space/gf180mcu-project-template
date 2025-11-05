@@ -15,7 +15,8 @@ meta:
     #KLayout.Density: null
     #Checker.KLayoutDensity: null
 
-    # Save time
+    # Save time during development
+    # Enable for sign-off
     #OpenROAD.IRDropReport: null
     #Magic.DRC: null
     #Checker.MagicDRC: null
@@ -46,7 +47,7 @@ PAD_SOUTH: [
     "bidir\\[4\\].pad",
     "bidir\\[5\\].pad",
 
-    dvss_south_0,
+    "dvss_pads\\[0\\].pad",
 
     "bidir\\[6\\].pad",
     "bidir\\[7\\].pad",
@@ -59,8 +60,8 @@ PAD_SOUTH: [
 ]
 
 PAD_EAST: [
-    dvdd_east_0,
-    dvss_east_0,
+    "dvdd_pads\\[0\\].pad",
+    "dvss_pads\\[1\\].pad",
 
     "bidir\\[14\\].pad",
     "bidir\\[15\\].pad",
@@ -69,8 +70,8 @@ PAD_EAST: [
     "bidir\\[18\\].pad",
     "bidir\\[19\\].pad",
     
-    dvdd_east_1,
-    dvss_east_1,
+    "dvdd_pads\\[1\\].pad",
+    "dvss_pads\\[2\\].pad",
 
     
     "bidir\\[20\\].pad",
@@ -80,15 +81,15 @@ PAD_EAST: [
     "bidir\\[24\\].pad",
     "bidir\\[25\\].pad",
     
-    dvss_east_2,
-    dvdd_east_2,
-    dvss_east_3,
-    dvdd_east_3
+    "dvss_pads\\[3\\].pad",
+    "dvdd_pads\\[2\\].pad",
+    "dvss_pads\\[4\\].pad",
+    "dvdd_pads\\[3\\].pad",
 ]
 
 PAD_NORTH: [
-    "bidir\\[41\\].pad",
-    "bidir\\[40\\].pad",
+    "analog\\[1\\].pad",
+    "analog\\[0\\].pad",
     "bidir\\[39\\].pad",
     "bidir\\[38\\].pad",
     "bidir\\[37\\].pad",
@@ -96,7 +97,7 @@ PAD_NORTH: [
     "bidir\\[35\\].pad",
     "bidir\\[34\\].pad",
 
-    dvss_north_0,
+    "dvss_pads\\[5\\].pad",
 
     "bidir\\[33\\].pad",
     "bidir\\[32\\].pad",
@@ -110,10 +111,10 @@ PAD_NORTH: [
 
 
 PAD_WEST: [
-    dvdd_west_3,
-    dvss_west_3,
-    dvdd_west_2,
-    dvss_west_2,
+    "dvdd_pads\\[7\\].pad",
+    "dvss_pads\\[9\\].pad",
+    "dvdd_pads\\[6\\].pad",
+    "dvss_pads\\[8\\].pad",
 
     "inputs\\[11\\].pad",
     "inputs\\[10\\].pad",
@@ -122,16 +123,16 @@ PAD_WEST: [
     "inputs\\[7\\].pad",
     "inputs\\[6\\].pad",
 
-    dvdd_west_1,
-    dvss_west_1,
+    "dvdd_pads\\[5\\].pad",
+    "dvss_pads\\[7\\].pad",
 
     "inputs\\[5\\].pad",
     "inputs\\[4\\].pad",
     "inputs\\[3\\].pad",
     "inputs\\[2\\].pad",
 
-    dvdd_west_0,
-    dvss_west_0,
+    "dvdd_pads\\[4\\].pad",
+    "dvss_pads\\[6\\].pad",
     
     "inputs\\[1\\].pad",
     "inputs\\[0\\].pad"
@@ -173,7 +174,15 @@ CORE_AREA: [442, 442, 3490, 4680]
 PL_TARGET_DENSITY_PCT: 35
 GRT_ALLOW_CONGESTION: true
 
-# PDN
+# PDN - Straps
+PDN_VWIDTH: 5
+PDN_HWIDTH: 5
+PDN_VSPACING: 1
+PDN_HSPACING: 1
+PDN_VPITCH: 75
+PDN_HPITCH: 75
+
+# PDN - Core ring
 PDN_CORE_RING: True
 # Maximum metal width without slotting: 30um
 PDN_CORE_RING_VWIDTH: 25
@@ -196,6 +205,33 @@ MAGIC_GDS_FLATGLOB:
 # flattened to form a "filltrans" layer
 - "COMP_fill_cell"
 - "Poly2_fill_cell"
+# Foundry provided SRAMs
+- "*$$*"
+- "M1_N*"
+- "M1_P*"
+- "M2_M1*"
+- "M3_M2*"
+- "nmos_5p0*"
+- "nmos_1p2*"
+- "pmos_5p0*"
+- "pmos_1p2*"
+- "via1_*"
+- "ypass_gate*"
+- "G_ring_*"
+# These additional cells must be flattened to get rid of 3.3V devices
+# (DUALGATE drawn into high-level cells)
+- "dcap_103*"
+- "din_*"
+- "mux821_*"
+- "rdummy_*"
+- "pmoscap_*"
+- "xdec_*"
+- "ypredec*"
+- "xpredec*"
+- "xdec8_*"
+- "prexdec_*"
+- "xdec32_*"
+- "sa_*"
 
 # Because we have multiple power pads for one power domain
 MAGIC_EXT_UNIQUE: notopports
@@ -231,13 +267,44 @@ MACROS:
         location: [3762.75, 4952.75]
         orientation: N
 
+  gf180mcu_fd_ip_sram__sram512x8m8wm1:
+    gds:
+      - pdk_dir::libs.ref/gf180mcu_fd_ip_sram/gds/gf180mcu_fd_ip_sram__sram512x8m8wm1.gds
+    lef:
+      - pdk_dir::libs.ref/gf180mcu_fd_ip_sram/lef/gf180mcu_fd_ip_sram__sram512x8m8wm1.lef
+    vh:
+      - pdk_dir::libs.ref/gf180mcu_fd_ip_sram/verilog/gf180mcu_fd_ip_sram__sram512x8m8wm1__blackbox.v
+    lib:
+      "*_tt_025C_5v00":
+        - pdk_dir::libs.ref/gf180mcu_fd_ip_sram/lib/gf180mcu_fd_ip_sram__sram512x8m8wm1__tt_025C_5v00.lib
+      "*_ff_n40C_5v50":
+        - pdk_dir::libs.ref/gf180mcu_fd_ip_sram/lib/gf180mcu_fd_ip_sram__sram512x8m8wm1__ff_n40C_5v50.lib
+      "*_ss_125C_4v50":
+        - pdk_dir::libs.ref/gf180mcu_fd_ip_sram/lib/gf180mcu_fd_ip_sram__sram512x8m8wm1__ss_125C_4v50.lib
+    instances:
+      # Make sure to specify the SRAMs in pdn_cfg.tcl
+      i_chip_core.sram_0:
+        location: [500, 501]
+        orientation: N
+      i_chip_core.sram_1:
+        location: [1000, 501]
+        orientation: E
+
+# This is an alternative method compared to
+# specifying the power connections in the RTL
+PDN_MACRO_CONNECTIONS:
+- "i_chip_core.sram_0 VDD VSS VDD VSS"
+- "i_chip_core.sram_1 VDD VSS VDD VSS"
+
+PDN_CFG: dir::pdn_cfg.tcl
+
 # Make sure netgen doesn't create 'no_connect' nets
 # Not needed since netgen 1.5.303
 LVS_FLATTEN_CELLS:
 - gf180mcu_ws_ip__id
 - gf180mcu_ws_ip__logo
 
-# gf180mcu_ws_ip__id has no ports and components
+# gf180mcu_ws_ip__id/logo has no ports and components
 # therefore make it an abstract cell in the layout
 MAGIC_EXT_ABSTRACT_CELLS:
 - gf180mcu_ws_ip__id
