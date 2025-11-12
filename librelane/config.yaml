@@ -35,109 +35,6 @@ VERILOG_FILES:
 # Slightly smaller file sizes
 PRIMARY_GDSII_STREAMOUT_TOOL: klayout
 
-# Specify the pad instances for the padring
-PAD_SOUTH: [
-    clk_pad,
-    rst_n_pad,
-
-    "bidir\\[0\\].pad",
-    "bidir\\[1\\].pad",
-    "bidir\\[2\\].pad",
-    "bidir\\[3\\].pad",
-    "bidir\\[4\\].pad",
-    "bidir\\[5\\].pad",
-
-    "dvss_pads\\[0\\].pad",
-
-    "bidir\\[6\\].pad",
-    "bidir\\[7\\].pad",
-    "bidir\\[8\\].pad",
-    "bidir\\[9\\].pad",
-    "bidir\\[10\\].pad",
-    "bidir\\[11\\].pad",
-    "bidir\\[12\\].pad",
-    "bidir\\[13\\].pad"
-]
-
-PAD_EAST: [
-    "dvdd_pads\\[0\\].pad",
-    "dvss_pads\\[1\\].pad",
-
-    "bidir\\[14\\].pad",
-    "bidir\\[15\\].pad",
-    "bidir\\[16\\].pad",
-    "bidir\\[17\\].pad",
-    "bidir\\[18\\].pad",
-    "bidir\\[19\\].pad",
-    
-    "dvdd_pads\\[1\\].pad",
-    "dvss_pads\\[2\\].pad",
-
-    
-    "bidir\\[20\\].pad",
-    "bidir\\[21\\].pad",
-    "bidir\\[22\\].pad",
-    "bidir\\[23\\].pad",
-    "bidir\\[24\\].pad",
-    "bidir\\[25\\].pad",
-    
-    "dvss_pads\\[3\\].pad",
-    "dvdd_pads\\[2\\].pad",
-    "dvss_pads\\[4\\].pad",
-    "dvdd_pads\\[3\\].pad",
-]
-
-PAD_NORTH: [
-    "analog\\[1\\].pad",
-    "analog\\[0\\].pad",
-    "bidir\\[39\\].pad",
-    "bidir\\[38\\].pad",
-    "bidir\\[37\\].pad",
-    "bidir\\[36\\].pad",
-    "bidir\\[35\\].pad",
-    "bidir\\[34\\].pad",
-
-    "dvss_pads\\[5\\].pad",
-
-    "bidir\\[33\\].pad",
-    "bidir\\[32\\].pad",
-    "bidir\\[31\\].pad",
-    "bidir\\[30\\].pad",
-    "bidir\\[29\\].pad",
-    "bidir\\[28\\].pad",
-    "bidir\\[27\\].pad",
-    "bidir\\[26\\].pad"
-]
-
-
-PAD_WEST: [
-    "dvdd_pads\\[7\\].pad",
-    "dvss_pads\\[9\\].pad",
-    "dvdd_pads\\[6\\].pad",
-    "dvss_pads\\[8\\].pad",
-
-    "inputs\\[11\\].pad",
-    "inputs\\[10\\].pad",
-    "inputs\\[9\\].pad",
-    "inputs\\[8\\].pad",
-    "inputs\\[7\\].pad",
-    "inputs\\[6\\].pad",
-
-    "dvdd_pads\\[5\\].pad",
-    "dvss_pads\\[7\\].pad",
-
-    "inputs\\[5\\].pad",
-    "inputs\\[4\\].pad",
-    "inputs\\[3\\].pad",
-    "inputs\\[2\\].pad",
-
-    "dvdd_pads\\[4\\].pad",
-    "dvss_pads\\[6\\].pad",
-    
-    "inputs\\[1\\].pad",
-    "inputs\\[0\\].pad"
-]
-
 # SDC files
 PNR_SDC_FILE: dir::chip_top.sdc
 SIGNOFF_SDC_FILE: dir::chip_top.sdc
@@ -164,13 +61,6 @@ CLOCK_PERIOD: 40 # 25 MHz
 # Fix hold violations
 PL_RESIZER_HOLD_SLACK_MARGIN: 0.2
 GRT_RESIZER_HOLD_SLACK_MARGIN: 0.1
-
-# Floorplanning
-FP_SIZING: absolute
-# 3880umx5070um including 26um
-# for the sealring on all sides
-DIE_AREA: [0, 0, 3932, 5122]
-CORE_AREA: [442, 442, 3490, 4680]
 
 # Increase for more logic
 # on your die
@@ -271,7 +161,7 @@ MACROS:
         - dir::../ip/gf180mcu_ws_ip__logo/lib/gf180mcu_ws_ip__logo.lib
     instances:
       wafer_space_logo:
-        location: [3762.75, 4952.75]
+        location: ["expr::$DIE_AREA[2] + -169.25", "expr::$DIE_AREA[3] + -169.25"]
         orientation: N
 
   gf180mcu_fd_ip_sram__sram512x8m8wm1:
@@ -291,10 +181,10 @@ MACROS:
     instances:
       # Make sure to specify the SRAMs in pdn_cfg.tcl
       i_chip_core.sram_0:
-        location: [500, 500]
+        location: [490, 500]
         orientation: N
       i_chip_core.sram_1:
-        location: [1000, 500]
+        location: [970, 500]
         orientation: E
 
 # This is an alternative method compared to
