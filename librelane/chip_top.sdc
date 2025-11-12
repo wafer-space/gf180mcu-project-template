@@ -47,7 +47,7 @@ set_driving_cell -lib_cell gf180mcu_fd_io__in_s -pin PAD $clk_input
 
 # Bidirectional pads
 set clk_core_inout_ports [get_ports { 
-    bidir_PAD[.*]
+    bidir_PAD[*]
 }] 
 set_driving_cell -lib_cell gf180mcu_fd_io__bi_24t -pin PAD $clk_core_inout_ports
 
@@ -58,7 +58,7 @@ set_output_delay $output_delay_value -clock $clocks $clk_core_inout_ports
 # Input-only pads
 set clk_core_input_ports [get_ports { 
     rst_n_PAD
-    input_PAD[.*]
+    input_PAD[*]
 }] 
 set_driving_cell -lib_cell gf180mcu_fd_io__in_c -pin PAD $clk_core_input_ports
 
