@@ -1,0 +1,53 @@
+# Floorplanning
+FP_SIZING: absolute
+DIE_AREA: [0, 0, 3932, 2531]
+CORE_AREA: [442, 442, 3490, 2089]
+
+VERILOG_DEFINES: ["SLOT_1X0P5"]
+
+# Specify the pad instances for the padring
+PAD_SOUTH: [
+    clk_pad,
+    rst_n_pad,
+
+    "dvss_pads\\[0\\].pad",
+    "dvdd_pads\\[0\\].pad",
+
+    "bidir\\[0\\].pad",
+    "bidir\\[1\\].pad"
+]
+
+PAD_EAST: [
+
+    "bidir\\[2\\].pad",
+    "bidir\\[3\\].pad",
+    
+    "dvss_pads\\[1\\].pad",
+    "dvdd_pads\\[1\\].pad",
+    
+    "bidir\\[4\\].pad",
+    "bidir\\[5\\].pad"
+]
+
+PAD_NORTH: [
+    "analog\\[3\\].pad",
+    "analog\\[2\\].pad",
+
+    "dvss_pads\\[2\\].pad",
+    "dvdd_pads\\[2\\].pad",
+
+
+    "analog\\[1\\].pad",
+    "analog\\[0\\].pad"
+]
+
+
+PAD_WEST: [
+    "dvss_pads\\[3\\].pad",
+    "dvdd_pads\\[3\\].pad",
+
+    "inputs\\[3\\].pad",
+    "inputs\\[2\\].pad",
+    "inputs\\[1\\].pad",
+    "inputs\\[0\\].pad"
+]
