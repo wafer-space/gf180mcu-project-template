@@ -37,7 +37,7 @@
 
 `endif
 
-`ifdef SLOT_0P5x0P5
+`ifdef SLOT_0P5X0P5
 
 // Power/ground pads for core and I/O
 `define NUM_DVDD_PADS 4
