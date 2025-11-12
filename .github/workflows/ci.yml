@@ -28,10 +28,31 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' || !(startsWith(github.ref_name, 'version-') || github.ref_name == 'main' || github.ref_name == 'dev') }}
 
 jobs:
+  pre:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Define the Matrix
+        id: export-slots
+        if: 
+        run: |
+          if ${{ github.repository == 'wafer-space/gf180mcu-project-template' }}; then
+            echo "slots=['1x1', '0p5x1', '1x0p5', '0p5x0p5']" >> $GITHUB_OUTPUT
+          else
+            echo "slots=['default']" >> $GITHUB_OUTPUT
+          fi
+    outputs:
+      matrix: ${{ steps.export-slots.outputs.slots }}
   chip:
     runs-on: ubuntu-24.04
     name: Build the Chip
+    needs:
+      - pre
+    strategy:
+      matrix:
+        slot: ${{fromJSON(needs.pre.outputs.matrix)}}
     steps:
+      - name: Set slot
+        run: echo "SLOT=${{ matrix.slot }}" >> $GITHUB_ENV
       - name: Maximize build space
         uses: AdityaGarg8/remove-unwanted-software@v5
         with:
@@ -73,12 +94,12 @@ jobs:
       - name: Upload GDS
         uses: actions/upload-artifact@v4
         with:
-          name: gds
+          name: ${{ matrix.slot }}_gds
           path: final/gds/*
       - name: Upload image
         uses: actions/upload-artifact@v4
         with:
-          name: image
+          name: ${{ matrix.slot }}_image
           path: img/*.png
       - name: Run GL simulation
         run: |

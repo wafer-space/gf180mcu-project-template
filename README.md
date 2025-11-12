@@ -89,6 +89,26 @@ To implement your own design, simply edit `chip_core.sv`. The `chip_core` module
 > [!NOTE]
 > For more comprehensive SystemVerilog support, enable the `USE_SLANG` variable in the LibreLane configuration.
 
+## Choosing a Different Slot Size
+
+The template supports the following slot sizes: `1x1`, `0p5x1`, `1x0p5`, `0p5x0p5`.
+By default, the design is implemented using the `1x1` slot definition.
+
+To select a different slot size, simply set the `SLOT` environment variable.
+This can be done when invoking a make target:
+
+```
+SLOT=0p5x0p5 make librelane
+```
+
+Alternatively, you can export the slot size:
+
+```
+export SLOT=0p5x0p5
+```
+
+You can change the slot that is selected by default in the Makefile by editing the value of `DEFAULT_SLOT`.
+
 ## Precheck
 
 To check whether your design is suitable for manufacturing, run the [gf180mcu-precheck](https://github.com/wafer-space/gf180mcu-precheck) with your layout.
