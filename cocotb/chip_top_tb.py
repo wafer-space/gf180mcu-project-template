@@ -16,7 +16,7 @@ pdk_root = os.getenv("PDK_ROOT", Path("~/.ciel").expanduser())
 pdk = os.getenv("PDK", "gf180mcuD")
 scl = os.getenv("SCL", "gf180mcu_fd_sc_mcu7t5v0")
 gl = os.getenv("GL", False)
-slot = os.getenv("SLOT", "SLOT_1x1")
+slot = os.getenv("SLOT", "1x1")
 
 hdl_toplevel = "chip_top"
 
@@ -87,7 +87,7 @@ def chip_top_runner():
     proj_path = Path(__file__).resolve().parent
 
     sources = []
-    defines = {slot.upper(): True}
+    defines = {f"SLOT_{slot.upper()}": True}
     includes = [proj_path / "../src/"]
 
     if gl:
