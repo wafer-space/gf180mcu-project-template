@@ -31,6 +31,9 @@ jobs:
   chip:
     runs-on: ubuntu-24.04
     name: Build the Chip
+    strategy:
+      matrix:
+        slot: ["1x1", "0p5x1", "1x0p5", "0p5x0p5"]
     steps:
       - name: Maximize build space
         uses: AdityaGarg8/remove-unwanted-software@v5
@@ -63,17 +66,17 @@ jobs:
         with:
           flakes-from-devshell: true
           script: |
-            make sim
+            SLOT=${{ matrix.slot }} make sim
       - name: Implement the Chip
         uses: workflow/nix-shell-action@v3.4.0
         with:
           flakes-from-devshell: true
           script: |
-            make librelane-nodrc
-            make copy-final
+            SLOT=${{ matrix.slot }} make librelane-nodrc
+            SLOT=${{ matrix.slot }} make copy-final
       - name: Run GL simulation
         uses: workflow/nix-shell-action@v3.4.0
         with:
           flakes-from-devshell: true
           script: |
-            make sim-gl
+            SLOT=${{ matrix.slot }} make sim-gl
