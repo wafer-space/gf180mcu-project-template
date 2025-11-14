@@ -33,7 +33,7 @@ jobs:
     name: Build the Chip
     strategy:
       matrix:
-        slot: ["slot_1x1", "slot_0p5x1", "slot_1x0p5", "slot_0p5x0p5"]
+        slot: ["1x1", "0p5x1", "1x0p5", "0p5x0p5"]
     steps:
       - name: Maximize build space
         uses: AdityaGarg8/remove-unwanted-software@v5

@@ -14,25 +14,25 @@
 `ifdef SLOT_0P5X1
 
 // Power/ground pads for core and I/O
-`define NUM_DVDD_PADS 4
-`define NUM_DVSS_PADS 4
+`define NUM_DVDD_PADS 8
+`define NUM_DVSS_PADS 8
 
 // Signal pads
 `define NUM_INPUT_PADS 4
-`define NUM_BIDIR_PADS 6
-`define NUM_ANALOG_PADS 4
+`define NUM_BIDIR_PADS 46
+`define NUM_ANALOG_PADS 6
 
 `endif
 
 `ifdef SLOT_1X0P5
 
 // Power/ground pads for core and I/O
-`define NUM_DVDD_PADS 4
-`define NUM_DVSS_PADS 4
+`define NUM_DVDD_PADS 8
+`define NUM_DVSS_PADS 8
 
 // Signal pads
 `define NUM_INPUT_PADS 4
-`define NUM_BIDIR_PADS 6
+`define NUM_BIDIR_PADS 48
 `define NUM_ANALOG_PADS 4
 
 `endif
