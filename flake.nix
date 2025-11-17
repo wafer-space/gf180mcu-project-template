@@ -9,7 +9,7 @@
   };
 
   inputs = {
-    nix-eda.url = "github:fossi-foundation/nix-eda/5.8.0";
+    nix-eda.url = "github:fossi-foundation/nix-eda/5.9.0";
     librelane = {
       url = "github:librelane/librelane/leo/gf180mcu";
       inputs.nix-eda.follows = "nix-eda";
