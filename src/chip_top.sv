@@ -58,7 +58,7 @@ module chip_top #(
     
     for (genvar i=0; i<NUM_DVSS_PADS; i++) begin : dvss_pads
         (* keep *)
-        gf180mcu_fd_io__dvss pad (
+        gf180mcu_ws_io__dvss pad (
             `ifdef USE_POWER_PINS
             .DVDD   (VDD),
             .DVSS   (VSS),
