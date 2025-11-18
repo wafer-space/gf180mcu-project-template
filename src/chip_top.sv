@@ -14,12 +14,12 @@ module chip_top #(
     parameter NUM_ANALOG_PADS = 2
     )(
     `ifdef USE_POWER_PINS
-    inout wire VDD,
-    inout wire VSS,
+    inout  wire VDD,
+    inout  wire VSS,
     `endif
 
-    inout  wire       clk_PAD,
-    inout  wire       rst_n_PAD,
+    inout  wire clk_PAD,
+    inout  wire rst_n_PAD,
     
     inout  wire [NUM_INPUT_PADS-1:0] input_PAD,
     inout  wire [NUM_BIDIR_PADS-1:0] bidir_PAD,
