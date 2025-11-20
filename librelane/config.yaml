@@ -178,10 +178,10 @@ MACROS:
     instances:
       # Make sure to specify the SRAMs in pdn_cfg.tcl
       i_chip_core.sram_0:
-        location: [500, 500]
+        location: [490, 500]
         orientation: N
       i_chip_core.sram_1:
-        location: [1000, 500]
+        location: [970, 500]
         orientation: E
 
 # This is an alternative method compared to
