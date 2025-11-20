@@ -60,8 +60,8 @@ CLOCK_NET: clk_pad/Y
 CLOCK_PERIOD: 40 # 25 MHz
 
 # Fix hold violations
-PL_RESIZER_HOLD_SLACK_MARGIN: 0.2 # ns
-GRT_RESIZER_HOLD_SLACK_MARGIN: 0.1 # ns
+PL_RESIZER_HOLD_SLACK_MARGIN: 0.3 # ns
+GRT_RESIZER_HOLD_SLACK_MARGIN: 0.3 # ns
 
 # Increase for more logic
 # on your die
