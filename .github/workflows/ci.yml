@@ -59,21 +59,23 @@ jobs:
         run: |
           make clone-pdk
       - name: Run RTL simulation
-        uses: workflow/nix-shell-action@v3.4.0
-        with:
-          flakes-from-devshell: true
-          script: |
-            make sim
+        run: |
+          nix develop --command make sim
       - name: Implement the Chip
-        uses: workflow/nix-shell-action@v3.4.0
+        run: |
+          nix develop --command make librelane-nodrc
+          make copy-final
+          nix develop --command make render-image
+      - name: Upload GDS
+        uses: actions/upload-artifact@v4
         with:
-          flakes-from-devshell: true
-          script: |
-            make librelane-nodrc
-            make copy-final
+          name: gds
+          path: final/gds/*
+      - name: Upload image
+        uses: actions/upload-artifact@v4
+        with:
+          name: image
+          path: img/*.png
       - name: Run GL simulation
-        uses: workflow/nix-shell-action@v3.4.0
-        with:
-          flakes-from-devshell: true
-          script: |
-            make sim-gl
+        run: |
+          nix develop --command make sim-gl

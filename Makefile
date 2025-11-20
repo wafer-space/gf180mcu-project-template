@@ -51,7 +51,7 @@ sim: ## Run RTL simulation with cocotb
 	cd cocotb; PDK_ROOT=${PDK_ROOT} PDK=${PDK} python3 chip_top_tb.py
 .PHONY: sim
 
-sim-gl: ## Run gate-level simulation with cocotb
+sim-gl: ## Run gate-level simulation with cocotb (after copy-final)
 	cd cocotb; GL=1 PDK_ROOT=${PDK_ROOT} PDK=${PDK} python3 chip_top_tb.py
 .PHONY: sim-gl
 
@@ -62,4 +62,9 @@ sim-view: ## View simulation waveforms in GTKWave
 copy-final: ## Copy final output files from the last run
 	rm -rf final/
 	cp -r librelane/runs/${RUN_TAG}/final/ final/
+.PHONY: copy-final
+
+render-image: ## Render an image from the final layout (after copy-final)
+	mkdir -p img/
+	PDK_ROOT=${PDK_ROOT} PDK=${PDK} python3 scripts/lay2img.py final/gds/${TOP}.gds img/${TOP}.png --width 2048 --oversampling 4
 .PHONY: copy-final
