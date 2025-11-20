@@ -31,6 +31,9 @@ jobs:
   chip:
     runs-on: ubuntu-24.04
     name: Build the Chip
+    strategy:
+      matrix:
+        slot: ["1x1", "0p5x1", "1x0p5", "0p5x0p5"]
     steps:
       - name: Maximize build space
         uses: AdityaGarg8/remove-unwanted-software@v5
@@ -58,12 +61,13 @@ jobs:
       - name: Clone the PDK
         run: |
           make clone-pdk
+          
       - name: Run RTL simulation
         run: |
-          nix develop --command make sim
+          SLOT=${{ matrix.slot }} nix develop --command make sim
       - name: Implement the Chip
         run: |
-          nix develop --command make librelane-nodrc
+          SLOT=${{ matrix.slot }} nix develop --command make librelane-nodrc
           make copy-final
           nix develop --command make render-image
       - name: Create summary
@@ -82,4 +86,4 @@ jobs:
           path: img/*.png
       - name: Run GL simulation
         run: |
-          nix develop --command make sim-gl
+          SLOT=${{ matrix.slot }} nix develop --command make sim-gl
