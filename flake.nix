@@ -31,7 +31,13 @@
       system:
         import nixpkgs {
           inherit system;
-          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default];
+          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default (final: prev: {
+              magic = prev.magic.override {
+                version = "8.3.576";
+                sha256 = "sha256-IpGOY0oLqIj6gMMzg/BBwkdY6E15/BCTOtShzjnZQXI=";
+              };
+            })
+          ];
         }
     );
     
