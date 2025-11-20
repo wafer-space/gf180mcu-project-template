@@ -66,6 +66,10 @@ jobs:
           nix develop --command make librelane-nodrc
           make copy-final
           nix develop --command make render-image
+      - name: Create summary
+        run: |
+          echo "# Manufacturability" >> $GITHUB_STEP_SUMMARY
+          cat librelane/runs/*/*-misc-reportmanufacturability/manufacturability.rpt >> $GITHUB_STEP_SUMMARY
       - name: Upload GDS
         uses: actions/upload-artifact@v4
         with:
