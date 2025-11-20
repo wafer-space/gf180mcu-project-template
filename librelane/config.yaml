@@ -284,10 +284,10 @@ MACROS:
     instances:
       # Make sure to specify the SRAMs in pdn_cfg.tcl
       i_chip_core.sram_0:
-        location: [500, 501]
+        location: [500, 500]
         orientation: N
       i_chip_core.sram_1:
-        location: [1000, 501]
+        location: [1000, 500]
         orientation: E
 
 # This is an alternative method compared to
@@ -295,6 +295,11 @@ MACROS:
 PDN_MACRO_CONNECTIONS:
 - "i_chip_core.sram_0 VDD VSS VDD VSS"
 - "i_chip_core.sram_1 VDD VSS VDD VSS"
+
+# Halo size around macros while cutting rows.
+# Workaround for: https://github.com/The-OpenROAD-Project/OpenROAD/issues/8868
+FP_MACRO_HORIZONTAL_HALO: 5
+FP_MACRO_VERTICAL_HALO: 5
 
 PDN_CFG: dir::pdn_cfg.tcl
 
