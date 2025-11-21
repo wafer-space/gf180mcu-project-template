@@ -109,6 +109,20 @@ export SLOT=0p5x0p5
 
 You can change the slot that is selected by default in the Makefile by editing the value of `DEFAULT_SLOT`.
 
+## Building a Standalone Padring for Analog Design
+
+To build just the padring without any standard cell rows, digital routing or filler cells, run the following command:
+
+```
+make librelane-padring
+```
+
+It is also possible to build the padring for other slot sizes:
+
+```
+SLOT=0p5x0p5 make librelane-padring
+```
+
 ## Precheck
 
 To check whether your design is suitable for manufacturing, run the [gf180mcu-precheck](https://github.com/wafer-space/gf180mcu-precheck) with your layout.
