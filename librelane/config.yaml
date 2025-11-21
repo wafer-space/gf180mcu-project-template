@@ -159,8 +159,11 @@ IGNORE_DISCONNECTED_MODULES:
 # Clock
 CLOCK_PORT: clk_PAD
 CLOCK_NET: clk_pad/Y
-
 CLOCK_PERIOD: 40 # 25 MHz
+
+# Fix hold violations
+PL_RESIZER_HOLD_SLACK_MARGIN: 0.2
+GRT_RESIZER_HOLD_SLACK_MARGIN: 0.1
 
 # Floorplanning
 FP_SIZING: absolute
@@ -302,8 +305,10 @@ PDN_MACRO_CONNECTIONS:
 
 # Halo size around macros while cutting rows.
 # Workaround for: https://github.com/The-OpenROAD-Project/OpenROAD/issues/8868
-FP_MACRO_HORIZONTAL_HALO: 5
-FP_MACRO_VERTICAL_HALO: 5
+FP_MACRO_HORIZONTAL_HALO: 10
+FP_MACRO_VERTICAL_HALO: 10
+FP_PDN_HORIZONTAL_HALO: 5
+FP_PDN_VERTICAL_HALO: 5
 
 PDN_CFG: dir::pdn_cfg.tcl
 
