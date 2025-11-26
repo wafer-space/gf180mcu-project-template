@@ -7,9 +7,9 @@ all: logo drc
 .PHONY: all
 
 logo:
-	python3 script/make_gds.py image/wafer_space_logo.png gds/gf180mcu_ws_ip__logo.gds --cellname gf180mcu_ws_ip__logo --invert --merge --pixel-size 0.75 --scale 0.255 --foreground "81/0" --boundary "0/0" "152/5"
+	python3 script/make_gds.py image/wafer_space_logo.png gds/gf180mcu_ws_ip__logo.gds --cellname gf180mcu_ws_ip__logo --invert --merge --pixel-size 0.75 --width 191 --height 191 --foreground "81/0" --boundary "0/0" "152/5"
 .PHONY: logo
 
 drc:
-	PDK_ROOT=${PDK_ROOT} PDK=${PDK} klayout -b -zz -r ${PDK_ROOT}/${PDK}/libs.tech/klayout/tech/drc/gf180mcu.drc -rd input=gds/gf180mcu_ws_ip__logo.gds -rd report=report.xml -rd feol=false -rd beol=true
+	PDK_ROOT=${PDK_ROOT} PDK=${PDK} klayout -b -zz -r ${PDK_ROOT}/${PDK}/libs.tech/klayout/tech/drc/gf180mcu.drc -rd input=gds/gf180mcu_ws_ip__logo.gds -rd report=report.lyrdb -rd feol=false -rd beol=true
 .PHONY: drc

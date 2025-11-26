@@ -11,6 +11,8 @@ def convert_to_gds(
     output_filepath,
     cellname="TOP",
     scale=1.0,
+    width=None,
+    height=None,
     threshold=128,
     invert=False,
     invert_alpha=False,
@@ -59,6 +61,12 @@ def convert_to_gds(
     if scale != 1.0:
         new_image_binary.thumbnail(
             (new_image_binary.width * scale, new_image_binary.height * scale),
+            Image.LANCZOS,
+        )
+
+    if width or height:
+        new_image_binary.thumbnail(
+            (width, height),
             Image.LANCZOS,
         )
 
@@ -116,6 +124,12 @@ if __name__ == "__main__":
         "--scale", type=float, default=1.0, help="downscale the image, e.g. 0.5"
     )
     parser.add_argument(
+        "--width", type=int, default=None, help="scale to image width"
+    )
+    parser.add_argument(
+        "--height", type=int, default=None, help="scale to image height"
+    )
+    parser.add_argument(
         "--threshold", type=int, default=128, help="threshold to compare against"
     )
     parser.add_argument("--invert", action="store_true", help="invert the pixels")
@@ -143,6 +157,8 @@ if __name__ == "__main__":
         args.gds_path,
         cellname=args.cellname,
         scale=args.scale,
+        width=args.width,
+        height=args.height,
         threshold=args.threshold,
         invert=args.invert,
         invert_alpha=args.invert_alpha,
