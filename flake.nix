@@ -51,14 +51,15 @@
       default = lib.callPackageWith pkgs (librelane.createOpenLaneShell {
         extra-packages = with pkgs; [
           # Utilities
+          coreutils
           gnumake
           gnugrep
           gawk
-          
+
           # Simulation
           iverilog
           verilator
-          
+
           # Waveform viewing
           gtkwave
           surfer
