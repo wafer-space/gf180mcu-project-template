@@ -126,8 +126,9 @@ MAGIC_GDS_FLATGLOB:
 - "xdec_*"
 - "ypredec*"
 - "xpredec*"
-- "xdec8_*"
 - "prexdec_*"
+- "xdec8_*"
+- "xdec16_*"
 - "xdec32_*"
 - "sa_*"
 
