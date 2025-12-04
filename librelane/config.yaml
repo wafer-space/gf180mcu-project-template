@@ -8,8 +8,8 @@ meta:
     #Checker.KLayoutDRC: null
 
     # Disable KLayout antenna check
-    KLayout.Antenna: null
-    Checker.KLayoutAntenna: null
+    #KLayout.Antenna: null
+    #Checker.KLayoutAntenna: null
 
     # Disable KLayout density check
     #KLayout.Density: null
