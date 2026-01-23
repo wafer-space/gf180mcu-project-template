@@ -9,11 +9,7 @@
   };
 
   inputs = {
-    nix-eda.url = "github:fossi-foundation/nix-eda/5.9.0";
-    librelane = {
-      url = "github:librelane/librelane/leo/gf180mcu";
-      inputs.nix-eda.follows = "nix-eda";
-    };
+    librelane.url = "github:librelane/librelane/dev";
   };
 
   outputs = {
@@ -31,13 +27,7 @@
       system:
         import nixpkgs {
           inherit system;
-          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default (final: prev: {
-              magic = prev.magic.override {
-                version = "8.3.581";
-                sha256 = "sha256-mv6ekJsaFx6m828NenIRa4ryZsR7YHB1vWKI+axgx8U=";
-              };
-            })
-          ];
+          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default ];
         }
     );
     
@@ -48,7 +38,7 @@
     devShells = nix-eda.forAllSystems (system: let
       pkgs = (self.legacyPackages.${system});
     in {
-      default = lib.callPackageWith pkgs (librelane.createOpenLaneShell {
+      default = lib.callPackageWith pkgs (pkgs.createLibreLaneShell {
         extra-packages = with pkgs; [
           # Utilities
           gnumake
