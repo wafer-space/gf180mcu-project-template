@@ -211,15 +211,3 @@ PDN_HORIZONTAL_HALO: 5
 PDN_VERTICAL_HALO: 5
 
 PDN_CFG: dir::pdn_cfg.tcl
-
-# Make sure netgen doesn't create 'no_connect' nets
-# Not needed since netgen 1.5.303
-LVS_FLATTEN_CELLS:
-- gf180mcu_ws_ip__id
-- gf180mcu_ws_ip__logo
-
-# gf180mcu_ws_ip__id/logo has no ports and components
-# therefore make it an abstract cell in the layout
-MAGIC_EXT_ABSTRACT_CELLS:
-- gf180mcu_ws_ip__id
-- gf180mcu_ws_ip__logo

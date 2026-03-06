@@ -12,59 +12,72 @@
     librelane.url = "github:librelane/librelane/dev";
   };
 
-  outputs = {
-    self,
-    librelane,
-    ...
-  }: let
-    nix-eda = librelane.inputs.nix-eda;
-    devshell = librelane.inputs.devshell;
-    nixpkgs = nix-eda.inputs.nixpkgs;
-    lib = nixpkgs.lib;
-  in {
-    # Outputs
-    legacyPackages = nix-eda.forAllSystems (
-      system:
+  outputs =
+    {
+      self,
+      librelane,
+      ...
+    }:
+    let
+      nix-eda = librelane.inputs.nix-eda;
+      devshell = librelane.inputs.devshell;
+      nixpkgs = nix-eda.inputs.nixpkgs;
+      lib = nixpkgs.lib;
+    in
+    {
+      # Outputs
+      legacyPackages = nix-eda.forAllSystems (
+        system:
         import nixpkgs {
           inherit system;
-          overlays = [nix-eda.overlays.default devshell.overlays.default librelane.overlays.default ];
+          overlays = [
+            nix-eda.overlays.default
+            devshell.overlays.default
+            librelane.overlays.default
+          ];
         }
-    );
-    
-    packages = nix-eda.forAllSystems (system: {
-      inherit (self.legacyPackages.${system}.python3.pkgs);
-    });
-    
-    devShells = nix-eda.forAllSystems (system: let
-      pkgs = (self.legacyPackages.${system});
-    in {
-      default = lib.callPackageWith pkgs (pkgs.createLibreLaneShell {
-        extra-packages = with pkgs; [
-          # Utilities
-          gnumake
-          gnugrep
-          gawk
-          
-          # Simulation
-          iverilog
-          verilator
-          
-          # Waveform viewing
-          gtkwave
-          surfer
-        ];
-        
-        extra-python-packages = with pkgs.python3.pkgs; [
-          # Verification
-          cocotb
-          
-          # For KLayout Python DRC runner
-          docopt
-          
-          # For logo generation
-          pillow
-        ];
-      }) {};
-    });
-  };
+      );
+
+      packages = nix-eda.forAllSystems (system: {
+        inherit (self.legacyPackages.${system}.python3.pkgs) ;
+      });
+
+      devShells = nix-eda.forAllSystems (
+        system:
+        let
+          pkgs = (self.legacyPackages.${system});
+          callPackage = lib.callPackageWith pkgs;
+        in
+        {
+          default = pkgs.librelane-shell.override ({
+            extra-packages = with pkgs; [
+              # Utilities
+              gnumake
+              gnugrep
+              gawk
+
+              # Simulation
+              iverilog
+              verilator
+
+              # Waveform viewing
+              gtkwave
+              surfer
+            ];
+
+            extra-python-packages =
+              ps: with ps; [
+                # Verification
+                cocotb
+
+                # For KLayout Python DRC runner
+                docopt
+
+                # For logo generation
+                pillow
+              ];
+          });
+        }
+      );
+    };
 }
