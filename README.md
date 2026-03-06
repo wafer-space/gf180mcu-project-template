@@ -39,16 +39,6 @@ Or using KLayout:
 make librelane-klayout
 ```
 
-## Copying the Design to the Final Folder
-
-To copy your latest run to the `final/` folder in the root directory of the repository, run the following command:
-
-```
-make copy-final
-```
-
-This will only work if the last run was completed without errors.
-
 ## Verification and Simulation
 
 We use [cocotb](https://www.cocotb.org/), a Python-based testbench environment, for the verification of the chip.
@@ -67,7 +57,7 @@ make sim-gl
 ```
 
 > [!NOTE]
-> You need to have the latest implementation of your design in the `final/` folder. After implementing the design, execute 'make copy-final' to copy all necessary files.
+> You need to have the latest implementation of your design in the `final/` folder. After a run has completed without errors, the final views will be copied to `final/`.
 
 In both cases, a waveform file will be generated under `cocotb/sim_build/chip_top.fst`.
 You can view it using a waveform viewer, for example, [GTKWave](https://gtkwave.github.io/gtkwave/).
