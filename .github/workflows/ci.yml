@@ -89,7 +89,6 @@ jobs:
         if: success() || failure()
         run: |
           nix develop --command make librelane
-          make copy-final
           nix develop --command make render-image
       - name: Create summary
         if: success() || failure()
