@@ -22,11 +22,18 @@ module chip_top #(
 
     inout  wire clk_PAD,
     inout  wire rst_n_PAD,
-    
+
+    `ifdef NUM_INPUT_PADS
     inout  wire [NUM_INPUT_PADS-1:0] input_PAD,
+    `endif
+
+    `ifdef NUM_BIDIR_PADS
     inout  wire [NUM_BIDIR_PADS-1:0] bidir_PAD,
-    
+    `endif
+
+    `ifdef NUM_ANALOG_PADS
     inout  wire [NUM_ANALOG_PADS-1:0] analog_PAD
+    `endif
 );
 
     wire clk_PAD2CORE;
