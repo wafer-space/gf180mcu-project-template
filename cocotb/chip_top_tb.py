@@ -12,10 +12,12 @@ from cocotb.triggers import Timer, Edge, RisingEdge, FallingEdge, ClockCycles
 from cocotb_tools.runner import get_runner
 
 sim = os.getenv("SIM", "icarus")
-pdk_root = os.getenv("PDK_ROOT", Path("~/.ciel").expanduser())
+gl = os.getenv("GL", False)
+pdk_root = os.getenv("PDK_ROOT", Path(__file__).resolve().parent / "../gf180mcu")
 pdk = os.getenv("PDK", "gf180mcuD")
 scl = os.getenv("SCL", "gf180mcu_fd_sc_mcu7t5v0")
-gl = os.getenv("GL", False)
+pad = os.getenv("PAD", "gf180mcu_fd_io")
+sram = os.getenv("SRAM", "gf180mcu_fd_ip_sram")
 slot = os.getenv("SLOT", "1x1")
 
 hdl_toplevel = "chip_top"
@@ -70,6 +72,11 @@ async def test_counter(dut):
     # Wait for some time...
     await ClockCycles(dut.clk_PAD, 10)
 
+    # Please note that cocotb cannpt write to individual bits of a vector.
+    # If you need to write to individual bits, you can separate e.g. the 
+    # bidir_PAD vector into individual bits through a tb wrapper.
+    # Even better, use individual pad names for each bit.
+
     # Start the counter by setting all inputs to 1
     dut.input_PAD.value = -1
 
@@ -90,26 +97,34 @@ def chip_top_runner():
     defines = {f"SLOT_{slot.upper()}": True}
     includes = [proj_path / "../src/"]
 
+    # Set the LibreLane PDK/SCL/PAD defines
+    defines[f"PDK_{pdk.replace('-','_')}"] = True
+    defines[f"SCL_{scl}"] = True
+    defines[f"PAD_{pad}"] = True
+    defines[f"SRAM_{sram}"] = True
+
     if gl:
         # SCL models
         sources.append(Path(pdk_root) / pdk / "libs.ref" / scl / "verilog" / f"{scl}.v")
-        sources.append(Path(pdk_root) / pdk / "libs.ref" / scl / "verilog" / "primitives.v")
+        if scl != "gf180mcu_as_sc_mcu7t3v3":
+            sources.append(Path(pdk_root) / pdk / "libs.ref" / scl / "verilog" / "primitives.v")
+        else:
+            sources.append(proj_path / "gf180mcu_as_sc_mcu7t3v3_missing_cells.v")
 
         # We use the powered netlist
         sources.append(proj_path / f"../final/pnl/{hdl_toplevel}.pnl.v")
 
-        defines = {"FUNCTIONAL": True, "USE_POWER_PINS": True}
+        defines.update({"FUNCTIONAL": True, "USE_POWER_PINS": True})
     else:
         sources.append(proj_path / "../src/chip_top.sv")
         sources.append(proj_path / "../src/chip_core.sv")
 
     sources += [
         # IO pad models
-        Path(pdk_root) / pdk / "libs.ref/gf180mcu_fd_io/verilog/gf180mcu_fd_io.v",
-        Path(pdk_root) / pdk / "libs.ref/gf180mcu_fd_io/verilog/gf180mcu_ws_io.v",
+        Path(pdk_root) / pdk / f"libs.ref/{pad}/verilog/{pad}.v",
         
         # SRAM macros
-        Path(pdk_root) / pdk / "libs.ref/gf180mcu_fd_ip_sram/verilog/gf180mcu_fd_ip_sram__sram512x8m8wm1.v",
+        Path(pdk_root) / pdk / f"libs.ref/{sram}/verilog/{sram}__sram512x8m8wm1.v",
         
         # Custom IP
         proj_path / "../ip/gf180mcu_ws_ip__id/vh/gf180mcu_ws_ip__id.v",

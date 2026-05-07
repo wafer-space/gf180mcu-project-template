@@ -5,7 +5,7 @@ FP_SIZING: absolute
 DIE_AREA: [0, 0, 3932, 5122]
 CORE_AREA: [442, 442, 3490, 4680]
 
-VERILOG_DEFINES: ["SLOT_1X1"]
+#VERILOG_DEFINES: ["SLOT_1X1"]
 
 # Specify the pad instances for the padring
 PAD_SOUTH: [
@@ -19,7 +19,7 @@ PAD_SOUTH: [
     "bidir\\[4\\].pad",
     "bidir\\[5\\].pad",
 
-    "dvss_pads\\[0\\].pad",
+    "dvss_pads\\[0\\].pad", # I/O domain
 
     "bidir\\[6\\].pad",
     "bidir\\[7\\].pad",
@@ -32,8 +32,8 @@ PAD_SOUTH: [
 ]
 
 PAD_EAST: [
-    "dvdd_pads\\[0\\].pad",
-    "dvss_pads\\[1\\].pad",
+    "dvdd_pads\\[0\\].pad", # I/O domain
+    "dvss_pads\\[1\\].pad", # I/O domain
 
     "bidir\\[14\\].pad",
     "bidir\\[15\\].pad",
@@ -42,9 +42,8 @@ PAD_EAST: [
     "bidir\\[18\\].pad",
     "bidir\\[19\\].pad",
     
-    "dvdd_pads\\[1\\].pad",
-    "dvss_pads\\[2\\].pad",
-
+    "dvdd_pads\\[1\\].pad", # I/O domain
+    "dvss_pads\\[2\\].pad", # I/O domain
     
     "bidir\\[20\\].pad",
     "bidir\\[21\\].pad",
@@ -53,10 +52,10 @@ PAD_EAST: [
     "bidir\\[24\\].pad",
     "bidir\\[25\\].pad",
     
-    "dvss_pads\\[3\\].pad",
-    "dvdd_pads\\[2\\].pad",
-    "dvss_pads\\[4\\].pad",
-    "dvdd_pads\\[3\\].pad",
+    "vss_pads\\[0\\].pad", # core domain
+    "vdd_pads\\[0\\].pad", # core domain
+    "dvss_pads\\[3\\].pad", # I/O domain
+    "dvdd_pads\\[2\\].pad", # I/O domain
 ]
 
 PAD_NORTH: [
@@ -69,7 +68,7 @@ PAD_NORTH: [
     "bidir\\[35\\].pad",
     "bidir\\[34\\].pad",
 
-    "dvss_pads\\[5\\].pad",
+    "dvss_pads\\[4\\].pad", # I/O domain
 
     "bidir\\[33\\].pad",
     "bidir\\[32\\].pad",
@@ -83,10 +82,10 @@ PAD_NORTH: [
 
 
 PAD_WEST: [
-    "dvdd_pads\\[7\\].pad",
-    "dvss_pads\\[9\\].pad",
-    "dvdd_pads\\[6\\].pad",
-    "dvss_pads\\[8\\].pad",
+    "dvdd_pads\\[5\\].pad", # I/O domain
+    "dvss_pads\\[7\\].pad", # I/O domain
+    "vdd_pads\\[1\\].pad", # core domain
+    "vss_pads\\[1\\].pad", # core domain
 
     "inputs\\[11\\].pad",
     "inputs\\[10\\].pad",
@@ -95,16 +94,16 @@ PAD_WEST: [
     "inputs\\[7\\].pad",
     "inputs\\[6\\].pad",
 
-    "dvdd_pads\\[5\\].pad",
-    "dvss_pads\\[7\\].pad",
+    "dvdd_pads\\[4\\].pad", # I/O domain
+    "dvss_pads\\[6\\].pad", # I/O domain
 
     "inputs\\[5\\].pad",
     "inputs\\[4\\].pad",
     "inputs\\[3\\].pad",
     "inputs\\[2\\].pad",
 
-    "dvdd_pads\\[4\\].pad",
-    "dvss_pads\\[6\\].pad",
+    "dvdd_pads\\[3\\].pad", # I/O domain
+    "dvss_pads\\[5\\].pad", # I/O domain
     
     "inputs\\[1\\].pad",
     "inputs\\[0\\].pad"

@@ -3,6 +3,10 @@ meta:
   flow: Chip
   substituting_steps:
 
+    # Render the layout after sealring insertion
+    KLayout.Render: null
+    +KLayout.SealRing: KLayout.Render
+
     # Disable KLayout DRC
     #KLayout.DRC: null
     #Checker.KLayoutDRC: null
@@ -59,18 +63,25 @@ CLOCK_PORT: clk_PAD
 CLOCK_NET: clk_pad/Y
 CLOCK_PERIOD: 40 # 25 MHz
 
-# Fix hold violations
+# Overfix hold violations
 PL_RESIZER_HOLD_SLACK_MARGIN: 0.35
 GRT_RESIZER_HOLD_SLACK_MARGIN: 0.3
 
-# Increase for more logic
-# on your die
+# Increase density for more 
+# logic on your die
 PL_TARGET_DENSITY_PCT: 35
 GRT_ALLOW_CONGESTION: true
+
+# Allow a larger Y displacement
+PL_MAX_DISPLACEMENT_Y: 200
 
 # Fix antenna violations after DRT
 DRT_ANTENNA_REPAIR_ITERS: 10
 DRT_ANTENNA_REPAIR_MARGIN: 10 # %
+
+# PDN
+PDN_CFG: dir::pdn/pdn_cfg.tcl
+PDN_ENABLE_PINS: False
 
 # PDN - Straps
 PDN_VWIDTH: 5
@@ -86,14 +97,9 @@ PDN_CORE_RING: True
 PDN_CORE_RING_VWIDTH: 25
 PDN_CORE_RING_HWIDTH: 25
 PDN_CORE_RING_CONNECT_TO_PADS: True
-PDN_ENABLE_PINS: False
-PDN_CORE_VERTICAL_LAYER: Metal2
+PDN_CORE_VERTICAL_LAYER: Metal4
 PDN_CORE_HORIZONTAL_LAYER: Metal3
-
-# Due to OpenROAD bug
-# https://github.com/The-OpenROAD-Project/OpenROAD/issues/8229
-#PL_TIME_DRIVEN: False
-#PL_ROUTABILITY_DRIVEN: False
+PDN_CORE_RING_CONNECT_TO_PAD_LAYERS: [Metal2]
 
 # Do not error on magic DRC violations
 # Note: Passing magic DRC is not required for the submission.
@@ -143,71 +149,31 @@ KLAYOUT_FILLER_OPTIONS:
 # Because we have multiple power pads for one power domain
 MAGIC_EXT_UNIQUE: notopports
 
-MACROS:
-  gf180mcu_ws_ip__id:
-    gds:
-      - dir::../ip/gf180mcu_ws_ip__id/gds/gf180mcu_ws_ip__id.gds
-    lef:
-      - dir::../ip/gf180mcu_ws_ip__id/lef/gf180mcu_ws_ip__id.lef
-    vh:
-      - dir::../ip/gf180mcu_ws_ip__id/vh/gf180mcu_ws_ip__id.v
-    lib:
-      "*":
-        - dir::../ip/gf180mcu_ws_ip__id/lib/gf180mcu_ws_ip__id.lib
-    instances:
-      chip_id:
-        location: [26, 26]
-        orientation: N
+# Image render settings
+KLAYOUT_RENDER_RESOLUTION: 2048
+KLAYOUT_RENDER_OVERSAMPLING: 3
+KLAYOUT_PROPERTIES: dir::gf180mcu_render.lyp
 
-  gf180mcu_ws_ip__logo:
-    gds:
-      - dir::../ip/gf180mcu_ws_ip__logo/gds/gf180mcu_ws_ip__logo.gds
-    lef:
-      - dir::../ip/gf180mcu_ws_ip__logo/lef/gf180mcu_ws_ip__logo.lef
-    vh:
-      - dir::../ip/gf180mcu_ws_ip__logo/vh/gf180mcu_ws_ip__logo.v
-    lib:
-      "*":
-        - dir::../ip/gf180mcu_ws_ip__logo/lib/gf180mcu_ws_ip__logo.lib
-    instances:
-      wafer_space_logo:
-        location: ["expr::$DIE_AREA[2] + -169.25", "expr::$DIE_AREA[3] + -169.25"]
-        orientation: N
+# DRC settings
+# A high number of workers increases RAM usage,
+# but can significantly improve the performance.
+# workers * threads should equal the available
+# hardware threads for a best possible utilization.
 
-  gf180mcu_fd_ip_sram__sram512x8m8wm1:
-    gds:
-      - pdk_dir::libs.ref/gf180mcu_fd_ip_sram/gds/gf180mcu_fd_ip_sram__sram512x8m8wm1.gds
-    lef:
-      - pdk_dir::libs.ref/gf180mcu_fd_ip_sram/lef/gf180mcu_fd_ip_sram__sram512x8m8wm1.lef
-    vh:
-      - pdk_dir::libs.ref/gf180mcu_fd_ip_sram/verilog/gf180mcu_fd_ip_sram__sram512x8m8wm1__blackbox.v
-    lib:
-      "*_tt_025C_5v00":
-        - pdk_dir::libs.ref/gf180mcu_fd_ip_sram/lib/gf180mcu_fd_ip_sram__sram512x8m8wm1__tt_025C_5v00.lib
-      "*_ff_n40C_5v50":
-        - pdk_dir::libs.ref/gf180mcu_fd_ip_sram/lib/gf180mcu_fd_ip_sram__sram512x8m8wm1__ff_n40C_5v50.lib
-      "*_ss_125C_4v50":
-        - pdk_dir::libs.ref/gf180mcu_fd_ip_sram/lib/gf180mcu_fd_ip_sram__sram512x8m8wm1__ss_125C_4v50.lib
-    instances:
-      # Make sure to specify the SRAMs in pdn_cfg.tcl
-      i_chip_core.sram_0:
-        location: [490, 500]
-        orientation: N
-      i_chip_core.sram_1:
-        location: [970, 500]
-        orientation: E
+KLAYOUT_DRC_THREADS: 1
 
-# This is an alternative method compared to
-# specifying the power connections in the RTL
-PDN_MACRO_CONNECTIONS:
-- "i_chip_core.sram_0 VDD VSS VDD VSS"
-- "i_chip_core.sram_1 VDD VSS VDD VSS"
+# "max" equals max hardware threads
+KLAYOUT_DRC_OPTIONS:
+  decks: "all,-antenna,-density,-cup" # disable CUP for now
+  variant: ref::$PDK
+  workers: max
 
-# Halo size around macros while cutting rows.
-# Workaround for: https://github.com/The-OpenROAD-Project/OpenROAD/issues/8868
-FP_MACRO_HORIZONTAL_HALO: 10
-FP_MACRO_VERTICAL_HALO: 10
-PDN_HORIZONTAL_HALO: 5
-PDN_VERTICAL_HALO: 5
+KLAYOUT_DENSITY_OPTIONS:
+  decks: "density"
+  variant: ref::$PDK
+  workers: max
 
-PDN_CFG: dir::pdn_cfg.tcl
+KLAYOUT_ANTENNA_OPTIONS:
+  decks: "antenna"
+  variant: ref::$PDK
+  workers: max

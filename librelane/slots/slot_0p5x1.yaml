@@ -76,8 +76,8 @@ PAD_WEST: [
     "bidir\\[42\\].pad",
     "bidir\\[41\\].pad",
     
-    "dvss_pads\\[7\\].pad",
-    "dvdd_pads\\[7\\].pad",
+    "vss_pads\\[0\\].pad",
+    "vdd_pads\\[0\\].pad",
     
     "bidir\\[40\\].pad",
     "bidir\\[39\\].pad",
