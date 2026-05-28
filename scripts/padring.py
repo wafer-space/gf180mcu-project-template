@@ -60,23 +60,24 @@ class PadringFlow(SequentialFlow):
     ]
 
 
-def main(slot_config_path, config_path):
+def main(configs, pdk, pdk_root, scl, pad):
+    flow_cfg = {}
+    for config in configs:
+        flow_cfg.update(yaml.safe_load(open(config)))
 
-    PDK_ROOT = os.getenv("PDK_ROOT", os.path.expanduser("~/.ciel"))
-    PDK = os.getenv("PDK", "gf180mcuD")
-
-    print(f"PDK_ROOT = {PDK_ROOT}")
-    print(f"PDK = {PDK}")
-
-    flow_cfg = yaml.safe_load(open(slot_config_path))
-    flow_cfg.update(yaml.safe_load(open(config_path)))
-
+    print(os.path.dirname(configs[-1]))
+    print(os.path.abspath('.'))
+    
+    print(flow_cfg)
+    
     # Run flow
     flow = PadringFlow(
         flow_cfg,
-        design_dir=os.path.dirname(config_path),
-        pdk_root=PDK_ROOT,
-        pdk=PDK,
+        design_dir=os.path.join(os.path.abspath('.'), "librelane"),
+        pdk_root=pdk_root,
+        pdk=pdk,
+        scl=scl,
+        pad=pad,
     )
 
     try:
@@ -92,9 +93,15 @@ def main(slot_config_path, config_path):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("slot", default=".", help="path to slot config")
-    parser.add_argument("config", default=".", help="path to config")
+    parser.add_argument("configs", nargs="+", help="LibreLane config")
+    parser.add_argument("--pdk", default=None, help="PDK")
+    parser.add_argument("--pdk-root", default=None, help="PDK root")
+    parser.add_argument("--manual-pdk", action="store_true")
+    parser.add_argument("--scl", default=None, help="SCL")
+    parser.add_argument("--pad", default=None, help="PAD")
 
     args = parser.parse_args()
+    
+    assert (args.manual_pdk), "--manual-pdk must be set"
 
-    main(args.slot, args.config)
+    main(args.configs, args.pdk, args.pdk_root, args.scl, args.pad)

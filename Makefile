@@ -119,7 +119,7 @@ librelane-klayout: $(PDK_ROOT)/$(PDK) defines ## Open the last run in KLayout
 .PHONY: librelane-klayout
 
 librelane-padring: $(PDK_ROOT)/$(PDK) defines ## Only create the padring
-	SRAM_DEFINE=${SRAM_DEFINE} PDK_ROOT=${PDK_ROOT} PDK=${PDK} python3 scripts/padring.py librelane/slots/slot_${SLOT}.yaml librelane/config.yaml
+	python3 scripts/padring.py ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS}
 .PHONY: librelane-padring
 
 sim: $(PDK_ROOT)/$(PDK) defines ## Run RTL simulation with cocotb
