@@ -55,8 +55,11 @@ GND_NETS:
 # due to the unused Y output for output only pads
 IGNORE_DISCONNECTED_MODULES:
 - gf180mcu_fd_io__bi_24t
-- gf180mcu_ws_ip__id
+- gf180mcu_ws_ip__qrcode_id
+- gf180mcu_ws_ip__shuttle_id
+- gf180mcu_ws_ip__project_id
 - gf180mcu_ws_ip__logo
+- gf180mcu_ws_ip__marker
 
 # Clock
 CLOCK_PORT: clk_PAD

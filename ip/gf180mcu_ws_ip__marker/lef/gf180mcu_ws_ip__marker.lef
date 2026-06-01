@@ -1,0 +1,24 @@
+VERSION 5.7 ;
+  NOWIREEXTENSIONATPIN ON ;
+  DIVIDERCHAR "/" ;
+  BUSBITCHARS "[]" ;
+MACRO gf180mcu_ws_ip__marker
+  CLASS BLOCK ;
+  FOREIGN gf180mcu_ws_ip__marker ;
+  ORIGIN 0.000 0.000 ;
+  SIZE 245.0 BY 245.0 ;
+  OBS
+      LAYER Metal1 ;
+        POLYGON 0.0 245.0 245.0 0.0 245.0 245.0 ;
+      LAYER Metal2 ;
+        POLYGON 0.0 245.0 245.0 0.0 245.0 245.0 ;
+      LAYER Metal3 ;
+        POLYGON 0.0 245.0 245.0 0.0 245.0 245.0 ;
+      LAYER Metal4 ;
+        POLYGON 0.0 245.0 245.0 0.0 245.0 245.0 ;
+      LAYER Metal5 ;
+        POLYGON 0.0 245.0 245.0 0.0 245.0 245.0 ;
+  END
+END gf180mcu_ws_ip__marker
+END LIBRARY
+

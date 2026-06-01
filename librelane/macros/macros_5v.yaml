@@ -1,4 +1,5 @@
 MACROS:
+  # required: will be replaced with actual content
   gf180mcu_ws_ip__qrcode_id:
     gds:
       - dir::../ip/gf180mcu_ws_ip__qrcode_id/gds/gf180mcu_ws_ip__qrcode_id.gds
@@ -14,6 +15,7 @@ MACROS:
         location: [26, 26]
         orientation: N
 
+  # required: will be replaced with actual content
   gf180mcu_ws_ip__shuttle_id:
     gds:
       - dir::../ip/gf180mcu_ws_ip__shuttle_id/gds/gf180mcu_ws_ip__shuttle_id.gds
@@ -29,6 +31,7 @@ MACROS:
         location: [26, 175.6]
         orientation: E
 
+  # required: will be replaced with actual content
   gf180mcu_ws_ip__project_id:
     gds:
       - dir::../ip/gf180mcu_ws_ip__project_id/gds/gf180mcu_ws_ip__project_id.gds
@@ -44,6 +47,22 @@ MACROS:
         location: [175.6, 26]
         orientation: N
 
+  # required: top right corner marker
+  gf180mcu_ws_ip__marker:
+    gds:
+      - dir::../ip/gf180mcu_ws_ip__marker/gds/gf180mcu_ws_ip__marker.gds
+    lef:
+      - dir::../ip/gf180mcu_ws_ip__marker/lef/gf180mcu_ws_ip__marker.lef
+    vh:
+      - dir::../ip/gf180mcu_ws_ip__marker/vh/gf180mcu_ws_ip__marker.v
+    lib:
+      "*":
+        - dir::../ip/gf180mcu_ws_ip__marker/lib/gf180mcu_ws_ip__marker.lib
+    instances:
+      marker:
+        location: ["expr::($DIE_AREA[2] - (245 + 36))", "expr::($DIE_AREA[3] - (245 + 36))"]
+        orientation: N
+
   gf180mcu_ws_ip__logo:
     gds:
       - dir::../ip/gf180mcu_ws_ip__logo/gds/gf180mcu_ws_ip__logo.gds
@@ -56,7 +75,7 @@ MACROS:
         - dir::../ip/gf180mcu_ws_ip__logo/lib/gf180mcu_ws_ip__logo.lib
     instances:
       wafer_space_logo:
-        location: ["expr::$DIE_AREA[2] + -169.25", "expr::$DIE_AREA[3] + -169.25"]
+        location: [26, "expr::$DIE_AREA[3] - 169.25"]
         orientation: N
 
   # 5V SRAM

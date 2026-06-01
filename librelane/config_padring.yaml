@@ -1,0 +1,23 @@
+ meta:
+  version: 3
+  flow:
+    Verilator.Lint
+    Checker.LintTimingConstructs
+    Checker.LintErrors
+    Checker.LintWarnings
+    Yosys.JsonHeader
+    Yosys.Synthesis
+    Checker.YosysUnmappedCells
+    Checker.YosysSynthChecks
+    Checker.NetlistAssignStatements
+    OpenROAD.CheckSDCFiles
+    OpenROAD.CheckMacroInstances
+    OpenROAD.STAPrePNR
+    OpenROAD.Floorplan
+    OpenROAD.DumpRCValues
+    Odb.SetPowerConnections
+    OpenROAD.PadRing
+    Odb.CheckMacroAntennaProperties
+    Odb.ManualMacroPlacement
+    KLayout.StreamOut
+    KLayout.SealRing

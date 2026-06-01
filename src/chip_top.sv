@@ -261,14 +261,14 @@ module chip_top #(
         .analog     (analog_PAD)
     );
     
-    // Chip ID - do not remove, necessary for tapeout
+    // Do not remove, necessary for tapeout
     (* keep *) gf180mcu_ws_ip__qrcode_id qrcode_id ();
     (* keep *) gf180mcu_ws_ip__shuttle_id shuttle_id ();
     (* keep *) gf180mcu_ws_ip__project_id project_id ();
+    (* keep *) gf180mcu_ws_ip__marker marker ();
     
-    // wafer.space logo - can be removed
-    (* keep *)
-    gf180mcu_ws_ip__logo wafer_space_logo ();
+    // wafer.space logo - can be removed if desired
+    (* keep *) gf180mcu_ws_ip__logo wafer_space_logo ();
 
 endmodule
 
