@@ -2,9 +2,9 @@ VERSION 5.7 ;
   NOWIREEXTENSIONATPIN ON ;
   DIVIDERCHAR "/" ;
   BUSBITCHARS "[]" ;
-MACRO gf180mcu_ws_ip__id
+MACRO gf180mcu_ws_ip__qrcode_id
   CLASS BLOCK ;
-  FOREIGN gf180mcu_ws_ip__id ;
+  FOREIGN gf180mcu_ws_ip__qrcode_id ;
   ORIGIN 0.000 0.000 ;
   SIZE 142.800 BY 142.800 ;
   OBS
@@ -19,6 +19,6 @@ MACRO gf180mcu_ws_ip__id
       LAYER Metal5 ;
         RECT 0.0 0.0 142.8 142.8 ;
   END
-END gf180mcu_ws_ip__id
+END gf180mcu_ws_ip__qrcode_id
 END LIBRARY
 

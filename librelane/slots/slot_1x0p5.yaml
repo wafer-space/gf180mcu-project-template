@@ -87,8 +87,8 @@ PAD_NORTH: [
 
 
 PAD_WEST: [
-    "dvss_pads\\[7\\].pad",
-    "dvdd_pads\\[7\\].pad",
+    "vss_pads\\[0\\].pad",
+    "vdd_pads\\[0\\].pad",
 
     "inputs\\[3\\].pad",
     "inputs\\[2\\].pad",
