@@ -5,7 +5,7 @@ TOP = chip_top
 
 PDK_ROOT ?= $(MAKEFILE_DIR)/gf180mcu
 PDK ?= gf180mcuD
-PDK_COMMIT ?= f3b5e46babb6b417f9a1a1b5c413f7dda6f68a51
+PDK_COMMIT ?= 9233c19260cd813c3fa67dd4594fe4cc67016832
 
 # Available SCL libraries:
 # gf180mcu_as_sc_mcu7t3v3
@@ -75,10 +75,10 @@ help: ## Show this help message
 all: librelane ## Build the project (runs LibreLane)
 .PHONY: all
 
-$(PDK_ROOT)/$(PDK):
+$(PDK_ROOT)/ciel/gf180mcu/versions/$(PDK_COMMIT)/$(PDK):
 	ciel enable $(PDK_COMMIT) --pdk-root $(PDK_ROOT) --pdk-family $(PDK) --include-libraries all
 
-clone-pdk: $(PDK_ROOT)/$(PDK) ## Clone the gf180mcu PDK
+clone-pdk: $(PDK_ROOT)/ciel/gf180mcu/versions/$(PDK_COMMIT)/$(PDK) ## Clone the gf180mcu PDK
 .PHONY: clone-pdk
 
 # Need to find a better way to
@@ -90,43 +90,43 @@ defines:
 	$(file >>src/generated_defines.svh,`define ${SRAM_DEFINE})
 .PHONY: defines
 
-librelane: $(PDK_ROOT)/$(PDK) defines ## Run LibreLane flow (synthesis, PnR, verification)
+librelane: clone-pdk defines ## Run LibreLane flow (synthesis, PnR, verification)
 	SRAM_DEFINE=${SRAM_DEFINE} librelane ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS} --save-views-to $(MAKEFILE_DIR)/final
 .PHONY: librelane
 
-librelane-condensed: $(PDK_ROOT)/$(PDK) defines ## Run LibreLane flow (synthesis, PnR, verification)
+librelane-condensed: clone-pdk defines ## Run LibreLane flow (synthesis, PnR, verification)
 	SRAM_DEFINE=${SRAM_DEFINE} librelane --condensed ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS} --save-views-to $(MAKEFILE_DIR)/final
 .PHONY: librelane-condensed
 
-librelane-nodrc: $(PDK_ROOT)/$(PDK) defines ## Run LibreLane flow without DRC checks
+librelane-nodrc: clone-pdk defines ## Run LibreLane flow without DRC checks
 	SRAM_DEFINE=${SRAM_DEFINE} librelane ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS} --save-views-to $(MAKEFILE_DIR)/final --skip KLayout.Antenna --skip KLayout.DRC --skip Magic.DRC
 .PHONY: librelane-nodrc
 
-librelane-klayoutdrc: $(PDK_ROOT)/$(PDK) defines ## Run LibreLane flow without magic DRC checks
+librelane-klayoutdrc: clone-pdk defines ## Run LibreLane flow without magic DRC checks
 	SRAM_DEFINE=${SRAM_DEFINE} librelane ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS} --save-views-to $(MAKEFILE_DIR)/final --skip Magic.DRC
 .PHONY: librelane-klayoutdrc
 
-librelane-magicdrc: $(PDK_ROOT)/$(PDK) defines ## Run LibreLane flow without KLayout DRC checks
+librelane-magicdrc: clone-pdk defines ## Run LibreLane flow without KLayout DRC checks
 	SRAM_DEFINE=${SRAM_DEFINE} librelane ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS} --save-views-to $(MAKEFILE_DIR)/final --skip KLayout.DRC
 .PHONY: librelane-magicdrc
 
-librelane-openroad: $(PDK_ROOT)/$(PDK) defines ## Open the last run in OpenROAD
+librelane-openroad: clone-pdk defines ## Open the last run in OpenROAD
 	SRAM_DEFINE=${SRAM_DEFINE} librelane ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS} --last-run --flow OpenInOpenROAD
 .PHONY: librelane-openroad
 
-librelane-klayout: $(PDK_ROOT)/$(PDK) defines ## Open the last run in KLayout
+librelane-klayout: clone-pdk defines ## Open the last run in KLayout
 	SRAM_DEFINE=${SRAM_DEFINE} librelane ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS} --last-run --flow OpenInKLayout
 .PHONY: librelane-klayout
 
-librelane-padring: $(PDK_ROOT)/$(PDK) defines ## Only create the padring
+librelane-padring: clone-pdk defines ## Only create the padring
 	python3 scripts/padring.py ${LIBRELANE_CONFIGS} ${LIBRELANE_OPTS}
 .PHONY: librelane-padring
 
-sim: $(PDK_ROOT)/$(PDK) defines ## Run RTL simulation with cocotb
+sim: clone-pdk defines ## Run RTL simulation with cocotb
 	cd cocotb; PDK_ROOT=${PDK_ROOT} PDK=${PDK} SLOT=${SLOT} PAD=${PAD} SCL=${SCL} SRAM=${SRAM} python3 chip_top_tb.py
 .PHONY: sim
 
-sim-gl: $(PDK_ROOT)/$(PDK) defines ## Run gate-level simulation with cocotb (after copy-final)
+sim-gl: clone-pdk defines ## Run gate-level simulation with cocotb (after copy-final)
 	cd cocotb; GL=1 PDK_ROOT=${PDK_ROOT} PDK=${PDK} SLOT=${SLOT} PAD=${PAD} SCL=${SCL} SRAM=${SRAM} python3 chip_top_tb.py
 .PHONY: sim-gl
 
