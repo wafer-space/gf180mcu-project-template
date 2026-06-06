@@ -108,8 +108,6 @@ def chip_top_runner():
         sources.append(Path(pdk_root) / pdk / "libs.ref" / scl / "verilog" / f"{scl}.v")
         if scl != "gf180mcu_as_sc_mcu7t3v3":
             sources.append(Path(pdk_root) / pdk / "libs.ref" / scl / "verilog" / "primitives.v")
-        else:
-            sources.append(proj_path / "gf180mcu_as_sc_mcu7t3v3_missing_cells.v")
 
         # We use the powered netlist
         sources.append(proj_path / f"../final/pnl/{hdl_toplevel}.pnl.v")
