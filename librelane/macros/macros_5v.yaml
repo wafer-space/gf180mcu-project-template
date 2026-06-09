@@ -48,20 +48,20 @@ MACROS:
         orientation: N
 
   # required: top right corner marker
-  gf180mcu_ws_ip__marker:
-    gds:
-      - dir::../ip/gf180mcu_ws_ip__marker/gds/gf180mcu_ws_ip__marker.gds
-    lef:
-      - dir::../ip/gf180mcu_ws_ip__marker/lef/gf180mcu_ws_ip__marker.lef
-    vh:
-      - dir::../ip/gf180mcu_ws_ip__marker/vh/gf180mcu_ws_ip__marker.v
-    lib:
-      "*":
-        - dir::../ip/gf180mcu_ws_ip__marker/lib/gf180mcu_ws_ip__marker.lib
-    instances:
-      marker:
-        location: ["expr::($DIE_AREA[2] - (245 + 36))", "expr::($DIE_AREA[3] - (245 + 36))"]
-        orientation: N
+  #gf180mcu_ws_ip__marker:
+  #  gds:
+  #    - dir::../ip/gf180mcu_ws_ip__marker/gds/gf180mcu_ws_ip__marker.gds
+  #  lef:
+  #    - dir::../ip/gf180mcu_ws_ip__marker/lef/gf180mcu_ws_ip__marker.lef
+  #  vh:
+  #    - dir::../ip/gf180mcu_ws_ip__marker/vh/gf180mcu_ws_ip__marker.v
+  #  lib:
+  #    "*":
+  #      - dir::../ip/gf180mcu_ws_ip__marker/lib/gf180mcu_ws_ip__marker.lib
+  #  instances:
+  #    marker:
+  #      location: ["expr::($DIE_AREA[2] - (245 + 36))", "expr::($DIE_AREA[3] - (245 + 36))"]
+  #      orientation: N
 
   gf180mcu_ws_ip__logo:
     gds:

@@ -180,3 +180,5 @@ KLAYOUT_ANTENNA_OPTIONS:
   decks: "antenna"
   variant: ref::$PDK
   workers: max
+
+PAD_CFG: dir::pad_cfg.tcl

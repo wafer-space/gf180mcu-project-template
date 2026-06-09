@@ -63,6 +63,7 @@ module chip_core #(
 
     logic [7:0] sram_0_out;
 
+    (* keep *)
     `gf180mcu_xxx_ip_sram__sram512x8m8wm1 sram_0 (
         `ifdef USE_POWER_PINS
         .VDD  (VDD),
@@ -80,6 +81,7 @@ module chip_core #(
 
     logic [7:0] sram_1_out;
 
+    (* keep *)
     `gf180mcu_xxx_ip_sram__sram512x8m8wm1 sram_1 (
         `ifdef USE_POWER_PINS
         .VDD  (VDD),

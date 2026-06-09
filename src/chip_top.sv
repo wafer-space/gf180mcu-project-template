@@ -265,7 +265,7 @@ module chip_top #(
     (* keep *) gf180mcu_ws_ip__qrcode_id qrcode_id ();
     (* keep *) gf180mcu_ws_ip__shuttle_id shuttle_id ();
     (* keep *) gf180mcu_ws_ip__project_id project_id ();
-    (* keep *) gf180mcu_ws_ip__marker marker ();
+    //(* keep *) gf180mcu_ws_ip__marker marker ();
     
     // wafer.space logo - can be removed if desired
     (* keep *) gf180mcu_ws_ip__logo wafer_space_logo ();
