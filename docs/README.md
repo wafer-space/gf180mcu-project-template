@@ -44,9 +44,9 @@ We use three kinds of branches:
 **Golden flow:**
 
 ```
-                weekly PR
-<your-branch>  ───────────►  dev  ───────────►  main
-               (your work)              (only when stable)
+                    weekly PR
+<your-branch>     ───────────►       dev      ───────────►      main
+                   (your work)              only when stable
    ▲                                  │
    └──────────  sync back  ◄──────────┘
             (after each merge)
