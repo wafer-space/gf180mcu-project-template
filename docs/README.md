@@ -11,11 +11,13 @@
 
 ## 0. The idea in one paragraph
 
-Our project is split into **sub-blocks** (integrator, comparator, DAC, etc.).
+Our project is split into **sub-blocks** (integrator, D-type flip-flops for the
+feedback loop, non-overlapping clock generator, comparator, doubler).
 Each sub-block is owned by a **subgroup**. To keep everyone's work safe and
 independent, each subgroup works on **its own branch** and only edits **its own
 files**. Stable, integrated work lives on protected branches that nobody edits
-directly. You contribute your work by opening a **Pull Request (PR)** once a week.
+directly. You contribute your work by opening a **Pull Request (PR)** —
+**only when the team leader asks for an integration**.
 
 This way, *nobody can accidentally break someone else's work*, and every change
 is reviewed before it joins the shared design.
@@ -33,18 +35,26 @@ We use three kinds of branches:
 | *subgroup branches* | Each subgroup's working area | that subgroup only | ✅ yes |
 
 - **`main`** is the "safe" copy. We only update it when the whole design is stable.
-- **`dev`** is where everyone's weekly work comes together and gets simulated at the
-  top level.
+- **`dev`** is where everyone's work comes together at each integration round and
+  gets simulated at the top level.
 - **Your subgroup branch** is your workspace. Commit and push here as often as you like.
 
-> ⚠ **TBD — to be filled by the team lead:** the exact number and names of the
-> subgroup branches. Each subgroup will be told the name of *its* branch. Until
-> then, wherever this guide says `<your-branch>`, use the branch name you were given.
+**The subgroup branches** (one per sub-block — wherever this guide says
+`<your-branch>`, use the one assigned to your subgroup):
+
+| Block | Branch | Working folder |
+|---|---|---|
+| Integrator | `dsm-integrator` | `designs/integrator/` |
+| D-type flip-flops (feedback loop) | `dsm-dff` | `designs/dff/` |
+| Non-overlapping clock generator | `dsm-clkgen` | `designs/clkgen/` |
+| Comparator | `dsm-comparator` | `designs/comparator/` |
+| Doubler | `dsm-doubler` | `designs/doubler/` |
 
 **Golden flow:**
 
 ```
-                    weekly PR
+                 PR (when the team
+                 leader requests it)
 <your-branch>     ───────────►       dev      ───────────►      main
                    (your work)              only when stable
    ▲                                  │
@@ -102,10 +112,11 @@ Bad: `"changes"`, `"update"`, `"asdf"`.
 
 ---
 
-## 4. The weekly recipe (Pull Request + sync-back)
+## 4. The integration recipe (Pull Request + sync-back)
 
-Once a week (or when a piece of work is ready to share), your subgroup contributes
-its work to `dev`.
+PRs do not follow a fixed schedule. When the **team leader** announces an
+integration round (or explicitly asks your subgroup), you contribute your work
+to `dev` as follows.
 
 ### Step A — Open the Pull Request
 
@@ -129,12 +140,13 @@ git pull origin dev      # bring dev's changes into your branch
 git push                 # save the synced result
 ```
 
-> ⚠ **This is the step beginners forget.** If you skip it week after week, your
+> ⚠ **This is the step beginners forget.** If you skip it round after round, your
 > branch slowly drifts away from everyone else's and future merges get painful.
-> Sync back every week.
+> Sync back after **every** integration round.
 
-> ⚠ **TBD:** the weekly PR day (e.g., every Friday) and **who the integration lead
-> is** (the only person who merges into `dev` and `main`).
+> ⚠ **TBD:** **who the integration lead is** (the only person who merges into
+> `dev` and `main`). Reminder: PRs are opened **only when the team leader
+> requests them**.
 
 ---
 
