@@ -20,6 +20,24 @@ directly. You contribute your work by opening a **Pull Request (PR)** once a wee
 This way, *nobody can accidentally break someone else's work*, and every change
 is reviewed before it joins the shared design.
 
+### Where your files go
+
+Every sub-block has **its own folder** under `designs/DS_modulator/`. Work only
+inside the folder assigned to your subgroup:
+
+```
+designs/
+└── DS_modulator/
+    ├── integrator/     ← dsm-integrator
+    ├── dff/            ← dsm-dff        (feedback flip-flops)
+    ├── clkgen/         ← dsm-clkgen     (non-overlapping clock generator)
+    ├── comparator/     ← dsm-comparator
+    └── doubler/        ← dsm-doubler
+```
+
+Your **branch** and your **folder** go together: e.g. the integrator subgroup works
+on branch `dsm-integrator` and edits files inside `designs/DS_modulator/integrator/`.
+
 ---
 
 ## 1. The branches
@@ -30,16 +48,21 @@ We use three kinds of branches:
 |---|---|---|---|
 | `main` | Stable, verified, integration-tested work | nobody directly | ❌ never |
 | `dev` | Day-to-day integration + top-level simulations | nobody directly | ❌ never |
-| *subgroup branches* | Each subgroup's working area | that subgroup only | ✅ yes |
+| `dsm-integrator` | Integrator sub-block | integrator subgroup | ✅ yes |
+| `dsm-dff` | Feedback flip-flops | dff subgroup | ✅ yes |
+| `dsm-clkgen` | Non-overlapping clock generator | clkgen subgroup | ✅ yes |
+| `dsm-comparator` | Comparator sub-block | comparator subgroup | ✅ yes |
+| `dsm-doubler` | Doubler sub-block | doubler subgroup | ✅ yes |
 
 - **`main`** is the "safe" copy. We only update it when the whole design is stable.
 - **`dev`** is where everyone's weekly work comes together and gets simulated at the
   top level.
-- **Your subgroup branch** is your workspace. Commit and push here as often as you like.
+- **Your `dsm-*` branch** is your workspace. Commit and push here as often as you like.
 
-> ⚠ **TBD — to be filled by the team lead:** the exact number and names of the
-> subgroup branches. Each subgroup will be told the name of *its* branch. Until
-> then, wherever this guide says `<your-branch>`, use the branch name you were given.
+> Each subgroup works on exactly **one** `dsm-*` branch and edits only its matching
+> folder under `designs/DS_modulator/` (see "Where your files go" above). Wherever this
+> guide says `<your-branch>`, use your subgroup's branch from the table — e.g. the
+> integrator subgroup uses `dsm-integrator`.
 
 **Golden flow:**
 
@@ -86,8 +109,11 @@ git pull
 
 # 3. ... do your design work (only in your assigned files) ...
 
-# 4. Stage and save your work with a short message
-git add .
+# 4. Review what changed, then stage ONLY the files you worked on
+git status                                    # see the list of changed files
+git add designs/DS_modulator/<your-block>/    # stage your sub-block folder
+#   ...or name the specific files:
+#   git add path/to/file1 path/to/file2
 git commit -m "Short description of what you did"
 
 # 5. Send it to the shared server
@@ -96,6 +122,11 @@ git push
 
 That's the whole daily loop. Repeat as often as you like — small, frequent commits
 are better than one giant commit at the end of the week.
+
+> ⚠ **Avoid `git add .`** — it blindly stages *everything*, including files you
+> didn't mean to commit (simulation junk, other folders, half-finished edits). Always
+> know **what** you are committing: run `git status` first, then add your specific
+> files or your own sub-block folder.
 
 **Write useful commit messages.** Good: `"Add first-pass integrator OTA sizing"`.
 Bad: `"changes"`, `"update"`, `"asdf"`.
@@ -183,7 +214,7 @@ Work flows: **edit → `add` → `commit` → `push`**, and you receive others' 
 | `git branch` | List branches; `*` marks the one you're on |
 | `git switch <branch>` | Move to another branch |
 | `git pull` | Download and merge the latest changes |
-| `git add .` | Stage all your changes for the next commit |
+| `git add <file>` | Stage a specific changed file for the next commit |
 | `git commit -m "msg"` | Save a snapshot locally with a message |
 | `git push` | Upload your commits to GitHub |
 | `git log --oneline` | See the history of commits |
