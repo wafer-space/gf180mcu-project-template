@@ -3,8 +3,8 @@
 > **Read this before you push anything.**
 >
 > This guide explains *how we collaborate* on the design repository. You do **not**
-> need to be a git expert — just follow the recipes in sections 3 and 4. The git
-> basics in section 6 are optional, for those who want to understand what the
+> need to be a git expert — just follow the recipes in sections 4 and 5. The git
+> basics in section 7 are optional, for those who want to understand what the
 > commands actually do.
 
 ---
@@ -99,7 +99,55 @@ These five rules prevent ~95% of all problems. Memorize them.
 
 ---
 
-## 3. Your everyday recipe (daily)
+## 3. First-time setup (run this ONCE)
+
+The very first time you work on this project, do this **once** on your machine.
+
+### Step 1 — Clone the repository
+
+```bash
+git clone <repo-url>
+cd chipa2026_gf180mcu_DeltaSigma
+```
+
+> Ask the team leader for the exact `<repo-url>` and for **which block** you are
+> assigned (integrator, dff, clkgen, comparator, or doubler).
+
+### Step 2 — Run the setup helper
+
+```bash
+./first_setup.sh
+```
+
+This script gets your machine ready in under a minute. It:
+
+1. Checks git is installed and that you are inside the repo.
+2. Asks your **name and email** for git (only if not set yet) — these appear on
+   your commits.
+3. Sets beginner-safe git defaults.
+4. Turns on the **safety hooks** (see the note below).
+5. Shows the list of subgroup branches and asks **which block you are on**.
+6. Switches you to your branch and remembers your choice in a local file
+   (`.myblock`), so you never have to retype it.
+
+When it finishes you are **on your subgroup branch, ready to work** — go straight
+to section 4.
+
+> 🔁 **Safe to run again.** If you ever need to change your block, just run
+> `./first_setup.sh` again.
+
+> 🛡 **About the safety hooks.** After setup, git will *automatically stop* you
+> from two common accidents:
+> - committing while you are on `main` or `dev` (it tells you to switch to your branch), and
+> - committing files that live in **another subgroup's folder**.
+>
+> If it blocks you, read the message — it tells you exactly what to do. It's a
+> safety net, not a punishment. (The integration lead, who sometimes must commit
+> outside these rules, can override a single commit with `git commit --no-verify`.)
+
+---
+
+## 4. Your everyday recipe (daily)
 
 Do this every time you sit down to work:
 
@@ -136,7 +184,7 @@ Bad: `"changes"`, `"update"`, `"asdf"`.
 
 ---
 
-## 4. The integration recipe (Pull Request + sync-back)
+## 5. The integration recipe (Pull Request + sync-back)
 
 PRs do not follow a fixed schedule. When the **team leader** announces an
 integration round (or explicitly asks your subgroup), you contribute your work
@@ -144,7 +192,7 @@ to `dev` as follows.
 
 ### Step A — Open the Pull Request
 
-1. Push your latest work (section 3).
+1. Push your latest work (section 4).
 2. Go to the repository on GitHub.
 3. Open a **Pull Request** from `<your-branch>` → `dev`.
 4. Write a short description of what changed.
@@ -174,7 +222,7 @@ git push                 # save the synced result
 
 ---
 
-## 5. What to do when something goes wrong
+## 6. What to do when something goes wrong
 
 You will hit these. They are normal. Don't panic, don't force anything.
 
@@ -191,7 +239,7 @@ you are and what's going on — and share its output with the team before acting
 
 ---
 
-## 6. Git basics (optional — for the curious)
+## 7. Git basics (optional — for the curious)
 
 You can use the recipes above without reading this. But if you want to understand
 what's happening, here's the minimum mental model.
@@ -236,7 +284,7 @@ A **Pull Request** is a request to merge your branch's work into another branch
 
 ---
 
-## 7. Glossary
+## 8. Glossary
 
 - **Repository (repo):** the project and all its history.
 - **Branch:** an independent line of work.
@@ -248,7 +296,7 @@ A **Pull Request** is a request to merge your branch's work into another branch
 
 ---
 
-## 8. Who to ask
+## 9. Who to ask
 
 > ⚠ **TBD:** fill in names / contact channel.
 >
