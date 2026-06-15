@@ -1,0 +1,8 @@
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/gate_buf_L0d28/xschem/gate_buf_L0d28.sch
+.subckt gate_buf_L0d28 VDD B A VSS
+*.PININFO B:O A:I VDD:B VSS:B
+MN1 net1 A VSS VSS nfet_03v3 L=0.28u W=1u nf=1 m=2
+MP1 net1 A VDD VDD pfet_03v3 L=0.28u W=3u nf=1 m=2
+MN2 B net1 VSS VSS nfet_03v3 L=0.28u W=1u nf=1 m=6
+MP2 B net1 VDD VDD pfet_03v3 L=0.28u W=3u nf=1 m=6
+.ends

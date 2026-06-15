@@ -1,0 +1,30 @@
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/gate_xor/xschem/gate_xor.sch
+.subckt gate_xor VDD S A B VSS
+*.PININFO VSS:B VDD:B S:B A:B B:B
+M2 S A vz VSS nfet_03v3 L=0.28u W=1u nf=1 m=4
+M3 S -B vx VDD pfet_03v3 L=0.28u W=3u nf=1 m=4
+M1 vx A VDD VDD pfet_03v3 L=0.28u W=3u nf=1 m=4
+M4 S -A vw VSS nfet_03v3 L=0.28u W=1u nf=1 m=4
+M5 S B vy VDD pfet_03v3 L=0.28u W=3u nf=1 m=4
+M6 vy -A VDD VDD pfet_03v3 L=0.28u W=3u nf=1 m=4
+M7 vz -B VSS VSS nfet_03v3 L=0.28u W=1u nf=1 m=4
+M8 vw B VSS VSS nfet_03v3 L=0.28u W=1u nf=1 m=4
+xINVA VDD -A A VSS gate_inv_L0d28
+xINVA1 VDD -B B VSS gate_inv_L0d28
+M9 VDD VDD VDD VDD pfet_03v3 L=0.28u W=3u nf=1 m=4
+M10 VDD VDD vx VDD pfet_03v3 L=0.28u W=3u nf=1 m=2
+M11 VDD VDD vy VDD pfet_03v3 L=0.28u W=3u nf=1 m=2
+M12 VSS VSS VSS VSS nfet_03v3 L=0.28u W=1u nf=1 m=4
+M13 vz VSS VSS VSS nfet_03v3 L=0.28u W=1u nf=1 m=2
+M14 vw VSS VSS VSS nfet_03v3 L=0.28u W=1u nf=1 m=2
+.ends
+
+* expanding   symbol:  gate_inv_L0d28/xschem/gate_inv_L0d28.sym # of pins=4
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/gate_inv_L0d28/xschem/gate_inv_L0d28.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/gate_inv_L0d28/xschem/gate_inv_L0d28.sch
+.subckt gate_inv_L0d28 VDD B A VSS
+*.PININFO B:O A:I VDD:B VSS:B
+MN B A VSS VSS nfet_03v3 L=0.28u W=1u nf=1 m=2
+MP B A VDD VDD pfet_03v3 L=0.28u W=3u nf=1 m=2
+.ends
+

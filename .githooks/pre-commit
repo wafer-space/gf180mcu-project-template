@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+#
+# pre-commit — team safety net for the Chipathon 2026 Delta-Sigma repo.
+#
+# It runs automatically every time you `git commit` and stops two common
+# mistakes BEFORE they happen:
+#
+#   1. Committing while you are on 'main' or 'dev' (protected branches).
+#   2. Committing files that belong to another subgroup's folder.
+#
+# It never changes your files — it only says yes/no to the commit.
+#
+# Installed for you by ./first_setup.sh (git config core.hooksPath .githooks).
+#
+# Need to bypass it on purpose (e.g. you are the integration lead)?
+#   git commit --no-verify
+
+set -u
+
+block() { printf '\n[BLOCKED] %s\n' "$*" >&2; }
+
+repo_root="$(git rev-parse --show-toplevel)"
+branch="$(git symbolic-ref --short HEAD 2>/dev/null || echo DETACHED)"
+
+# ---------------------------------------------------------- Guard 1: branch
+case "$branch" in
+    main|dev)
+        block "You are on '$branch' — a protected branch nobody commits to directly."
+        printf '    Switch to your subgroup branch first:\n' >&2
+        printf '        git switch <your-branch>\n' >&2
+        printf '    Not sure which one? Run:  ./first_setup.sh\n\n' >&2
+        exit 1
+        ;;
+esac
+
+# ---------------------------------------------------------- Guard 2: folder
+myblock_file="$repo_root/.myblock"
+if [ ! -f "$myblock_file" ]; then
+    printf '\n[note] No .myblock file found — skipping the folder check.\n' >&2
+    printf '       Run ./first_setup.sh so the hook knows which folder is yours.\n\n' >&2
+    exit 0
+fi
+
+block_branch="$(tr -d '[:space:]' < "$myblock_file")"
+block="${block_branch#dsm-}"                       # dsm-integrator -> integrator
+owned="designs/DS_modulator/$block/"
+
+# Every path staged for THIS commit (adds, edits, renames AND deletions —
+# you should not be touching another subgroup's files in any way).
+mapfile -t staged < <(git diff --cached --name-only)
+[ "${#staged[@]}" -gt 0 ] || exit 0               # nothing staged -> let git decide
+
+outside=()
+for f in "${staged[@]}"; do
+    case "$f" in
+        "$owned"*) : ;;                            # inside your folder -> ok
+        *) outside+=("$f") ;;
+    esac
+done
+
+if [ "${#outside[@]}" -gt 0 ]; then
+    block "Your block is '$block'. You may only commit files inside:"
+    printf '        %s\n' "$owned" >&2
+    printf '    But these staged files are OUTSIDE your folder:\n' >&2
+    printf '        - %s\n' "${outside[@]}" >&2
+    printf '\n    Unstage them, then commit only your block:\n' >&2
+    printf '        git restore --staged <file>\n' >&2
+    printf '    If you really must commit these (e.g. integration lead):\n' >&2
+    printf '        git commit --no-verify\n\n' >&2
+    exit 1
+fi
+
+exit 0

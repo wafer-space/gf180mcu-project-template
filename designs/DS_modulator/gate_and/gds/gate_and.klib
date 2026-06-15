@@ -1,0 +1,33 @@
+{
+    "technology": "",
+    "statements": [
+        {
+            "lib_name": "std_cell_frame",
+            "lib_path": "/foss/designs/chipathon_2025/designs/gf180/std_cells_layout_utils/std_cell_frame.gds"
+        },
+        {
+            "lib_name": "std_h_track",
+            "lib_path": "/foss/designs/chipathon_2025/designs/gf180/std_cells_layout_utils/std_h_track.gds"
+        },
+        {
+            "lib_name": "std_nfet",
+            "lib_path": "/foss/designs/chipathon_2025/designs/gf180/std_cells_layout_utils/std_nfet.gds"
+        },
+        {
+            "lib_name": "std_nfet_2nf",
+            "lib_path": "/foss/designs/chipathon_2025/designs/gf180/std_cells_layout_utils/std_nfet_2nf.gds"
+        },
+        {
+            "lib_name": "std_pfet",
+            "lib_path": "/foss/designs/chipathon_2025/designs/gf180/std_cells_layout_utils/std_pfet.gds"
+        },
+        {
+            "lib_name": "std_pfet_2nf",
+            "lib_path": "/foss/designs/chipathon_2025/designs/gf180/std_cells_layout_utils/std_pfet_2nf.gds"
+        },
+        {
+            "lib_name": "std_v_track",
+            "lib_path": "/foss/designs/chipathon_2025/designs/gf180/std_cells_layout_utils/std_v_track.gds"
+        }
+    ]
+}
