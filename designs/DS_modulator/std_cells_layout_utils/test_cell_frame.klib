@@ -1,0 +1,9 @@
+{
+    "technology": "",
+    "statements": [
+        {
+            "lib_name": "std_cell_frame",
+            "lib_path": "std_cell_frame.gds"
+        }
+    ]
+}

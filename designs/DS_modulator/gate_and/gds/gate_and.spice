@@ -1,0 +1,10 @@
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/gate_and/xschem/gate_and.sch
+.subckt gate_and B VDD VSS OUT A
+*.PININFO OUT:O A:I VDD:B VSS:B B:I
+MNB OUTN B NX VSS nfet_03v3 L=0.28u W=1u nf=1 m=4
+MPB OUTN B VDD VDD pfet_03v3 L=0.28u W=3u nf=1 m=2
+MNA NX A VSS VSS nfet_03v3 L=0.28u W=1u nf=1 m=4
+MPA OUTN A VDD VDD pfet_03v3 L=0.28u W=3u nf=1 m=2
+MIN OUT OUTN VSS VSS nfet_03v3 L=0.28u W=1u nf=1 m=2
+MIP OUT OUTN VDD VDD pfet_03v3 L=0.28u W=3u nf=1 m=2
+.ends

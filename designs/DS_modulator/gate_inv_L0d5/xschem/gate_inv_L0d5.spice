@@ -1,0 +1,6 @@
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/gate_inv_L0d5/xschem/gate_inv_L0d5.sch
+.subckt gate_inv_L0d5 VDD B A VSS
+*.PININFO B:O A:I VDD:B VSS:B
+MN B A VSS VSS nfet_03v3 L=0.5u W=1u nf=1 m=2
+MP B A VDD VDD pfet_03v3 L=0.5u W=3u nf=1 m=2
+.ends

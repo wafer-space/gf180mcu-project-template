@@ -1,0 +1,374 @@
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/LIF_Neuron_RAMP/xschem/LIF_Neuron_RAMP_x1_TB.sch
+**.subckt LIF_Neuron_RAMP_x1_TB
+VRESET net3 GND pwl 0 {VDD} 10n {VDD} 20n 0
+VSP net2 GND {VDD}
+VSN net1 GND {VSS}
+VR net4 GND {vref}
+VC net5 GND pwl 0 {vref} 95n {vref} 105n {vctr}
+R3 net5 Vctr 50 m=1
+R4 net3 RST 50 m=1
+R5 net4 Vref 50 m=1
+R6 net1 VSS 0 m=1
+R7 net2 VDD 0 m=1
+RIN1 Vctr Vx1 100k ac=1k m=1
+RFB1 Vx1 MEM1 100k ac=1k m=1
+C1 SPIKE1 VSS {cap} m=1
+xLIF VDD Vx1 MEM1 RST SPIKE1 VSS Vref LIF_Neuron_RAMP
+**** begin user architecture code
+
+.include /foss/pdks/gf180mcuD/libs.tech/ngspice/design.ngspice
+.lib /foss/pdks/gf180mcuD/libs.tech/ngspice/sm141064.ngspice typical
+.lib /foss/pdks/gf180mcuD/libs.tech/ngspice/sm141064.ngspice res_typical
+
+
+
+
+
+.param VDD = 3.3
+.param VSS = 0
+.param vctr = 1.8
+.param vref = 0
+.param cap = 15f
+
+.save all
+
+.control
+
+* >> Variables <<
+let Vhigh = 3.3
+let Vmid = Vhigh * 0.5
+
+let tstop = 0.2u
+let tstep = tstop/10k
+
+* Run transient analysis
+tran $&tstep $&tstop
+
+meas tran IDD_AVG AVG i(VSP) from=20n to=1u
+let PAVG = abs(IDD_AVG*Vhigh)
+print PAVG
+
+meas TRAN T_spk1 TRIG v(SPIKE1) VAL=Vmid rise=2 TARG v(SPIKE1) VAL=Vmid rise=3
+
+let F_spk1 = 1 / T_spk1
+print F_spk1
+
+plot v(Vctr) v(Vref) v(RST)
+
+plot v(MEM1) v(Vx1)
+
+plot v(xLIF.COMP)
+
+plot v(SPIKE1)
+
+.endc
+
+
+**** end user architecture code
+**.ends
+
+* expanding   symbol:  gf180/LIF_Neuron_RAMP/xschem/LIF_Neuron_RAMP.sym # of pins=7
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/LIF_Neuron_RAMP/xschem/LIF_Neuron_RAMP.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/LIF_Neuron_RAMP/xschem/LIF_Neuron_RAMP.sch
+.subckt LIF_Neuron_RAMP VDD Vx MEM RST SPIKE VSS Vref
+*.ipin Vx
+*.ipin RST
+*.iopin VDD
+*.iopin VSS
+*.opin SPIKE
+*.ipin Vref
+*.opin MEM
+xSPKGEN VDD COMP SPIKE INT_RST RST VSS spike_generator
+* noconn VDZP
+* noconn VDZN
+xRAMP VDZP VDD MEM COMP VDZN VSS ring_amplifier_v0
+xINT VDD Vx MEM INT_RST Vref VSS integrator
+.ends
+
+
+* expanding   symbol:  gf180/spike_generator/spike_generator.sym # of pins=6
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/spike_generator/spike_generator.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/spike_generator/spike_generator.sch
+.subckt spike_generator VDD Vcmp Vspk Vrst Ven VSS
+*.iopin Vcmp
+*.iopin Ven
+*.iopin Vrst
+*.iopin Vspk
+*.iopin VDD
+*.iopin VSS
+xOR Ven VDD VSS Vrst VCMPB gate_or
+xED VCMPB SPK_OUT VDD VSS edge_detector_TOP
+xBUF2 VDD Vspk SPK_OUT VSS gate_buf_L0d28
+x1 VDD VCMPB Vcmp VSS gate_inv_L0d28
+.ends
+
+
+* expanding   symbol:  gf180/ring_amplifier_v0/xschem/ring_amplifier_v0.sym # of pins=6
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/ring_amplifier_v0/xschem/ring_amplifier_v0.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/ring_amplifier_v0/xschem/ring_amplifier_v0.sch
+.subckt ring_amplifier_v0 VDZ+ VDD Vin Vout VDZ- VSS
+*.iopin VDD
+*.iopin VSS
+*.ipin Vin
+*.opin Vout
+*.opin VDZ+
+*.opin VDZ-
+XMN1 net1 Vin VSS VSS nfet_03v3 L=0.28u W=1.4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+XMP1 net1 Vin VDD VDD pfet_03v3 L=0.28u W=3.8u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+XMP2 VDZ+ net1 VDD VDD pfet_03v3 L=0.28u W=3.8u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+XMP3 Vout VDZ+ VDD VDD pfet_03v3 L=0.28u W=3.8u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+XMN3 Vout VDZ- VSS VSS nfet_03v3 L=0.28u W=1.4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+XMN2 VDZ- net1 VSS VSS nfet_03v3 L=0.28u W=1.4u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=1
+XRDZ VDZ- VDZ+ VSS ppolyf_u_1k r_width=1e-6 r_length=1e-6 m=1
+.ends
+
+
+* expanding   symbol:  gf180/integrator/xschem/integrator.sym # of pins=6
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/integrator/xschem/integrator.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/integrator/xschem/integrator.sch
+.subckt integrator VDD Vctr OUT RST Vref VSS
+*.ipin Vref
+*.ipin RST
+*.ipin Vctr
+*.opin OUT
+*.iopin VDD
+*.iopin VSS
+XMNBias VctrP Vctr VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMPBIas VctrP VctrP VDD VDD pfet_03v3 L=0.5u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+xINC1 VDD PC1 PC0 VSS VctrP Vctr integrator_curstav_inv
+xINC2 VDD PC2 PC1 VSS VctrP Vctr integrator_curstav_inv
+xINC3 VDD PC3 PC2 VSS VctrP Vctr integrator_curstav_inv
+xINC4 VDD PC4 PC3 VSS VctrP Vctr integrator_curstav_inv
+xINC0 VDD PC0 PC4 VSS VctrP Vctr integrator_curstav_inv
+XMRSC1 PC1 RST VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMRSC2 PC3 RST VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMDMC1 PC2 VSS VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMDMC2 PC0 VSS VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+xPD0 VDD VSS PC1 PR1 OUT integrator_phasedetector
+XMRSC3 PC4 RST VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+xINR0 VDD PR1 PR0 VSS VrefP Vref integrator_curstav_inv
+xINR1 VDD PR2 PR1 VSS VrefP Vref integrator_curstav_inv
+xINR2 VDD PR3 PR2 VSS VrefP Vref integrator_curstav_inv
+xINR3 VDD PR4 PR3 VSS VrefP Vref integrator_curstav_inv
+xINR4 VDD PR0 PR4 VSS VrefP Vref integrator_curstav_inv
+XMRSR1 PR1 RST VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMRSR2 PR3 RST VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMDMR1 PR2 VSS VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMDMR2 PR0 VSS VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMRSR3 PR4 RST VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+xPD1 VDD VSS PC2 PR2 OUT integrator_phasedetector
+xPD2 VDD VSS PC3 PR3 OUT integrator_phasedetector
+xPD3 VDD VSS PC4 PR4 OUT integrator_phasedetector
+xPD4 VDD VSS PC0 PR0 OUT integrator_phasedetector
+XMNBias1 VrefP Vref VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMPBIas1 VrefP VrefP VDD VDD pfet_03v3 L=0.5u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+.ends
+
+
+* expanding   symbol:  gf180/gate_or/xschem/gate_or.sym # of pins=5
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/gate_or/xschem/gate_or.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/gate_or/xschem/gate_or.sch
+.subckt gate_or B VDD VSS OUT A
+*.opin OUT
+*.ipin A
+*.iopin VDD
+*.iopin VSS
+*.ipin B
+XMNB OUTN B VSS VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMPB OUTN B net1 VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+XMNA OUTN A VSS VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMPA net1 A VDD VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+XMIN OUT OUTN VSS VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMIP OUT OUTN VDD VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMPB1 net1 VDD VDD VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMNA1 OUTN VSS VSS VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMNA2 VSS VSS VSS VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+.ends
+
+
+* expanding   symbol:  gf180/edge_detector/xschem/edge_detector_TOP.sym # of pins=4
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/edge_detector/xschem/edge_detector_TOP.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/edge_detector/xschem/edge_detector_TOP.sch
+.subckt edge_detector_TOP IN OUT VDD VSS
+*.iopin VDD
+*.iopin VSS
+*.ipin IN
+*.opin OUT
+xAND IN VDD VSS OUT X[4] gate_and
+xINV0 VDD X[0] IN VSS gate_inv_L0d5
+xINV1 VDD X[1] X[0] VSS gate_inv_L0d5
+xINV2 VDD X[2] X[1] VSS gate_inv_L0d5
+xINV3 VDD X[3] X[2] VSS gate_inv_L0d5
+xINV4 VDD X[4] X[3] VSS gate_inv_L0d5
+.ends
+
+
+* expanding   symbol:  gf180/gate_buf_L0d28/xschem/gate_buf_L0d28.sym # of pins=4
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/gate_buf_L0d28/xschem/gate_buf_L0d28.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/gate_buf_L0d28/xschem/gate_buf_L0d28.sch
+.subckt gate_buf_L0d28 VDD B A VSS
+*.opin B
+*.ipin A
+*.iopin VDD
+*.iopin VSS
+XMN1 net1 A VSS VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMP1 net1 A VDD VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMN2 B net1 VSS VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=6
+XMP2 B net1 VDD VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=6
+.ends
+
+
+* expanding   symbol:  gf180/gate_inv_L0d28/xschem/gate_inv_L0d28.sym # of pins=4
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/gate_inv_L0d28/xschem/gate_inv_L0d28.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/gate_inv_L0d28/xschem/gate_inv_L0d28.sch
+.subckt gate_inv_L0d28 VDD B A VSS
+*.opin B
+*.ipin A
+*.iopin VDD
+*.iopin VSS
+XMN B A VSS VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMP B A VDD VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+.ends
+
+
+* expanding   symbol:  gf180/integrator_curstav_inv/xschem/integrator_curstav_inv.sym # of pins=6
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/integrator_curstav_inv/xschem/integrator_curstav_inv.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/integrator_curstav_inv/xschem/integrator_curstav_inv.sch
+.subckt integrator_curstav_inv VDD B A VSS VctrP VctrN
+*.opin B
+*.ipin A
+*.iopin VDD
+*.iopin VSS
+*.iopin VctrP
+*.iopin VctrN
+XMN2 B A XN VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMP1 B A XP VDD pfet_03v3 L=0.5u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMP2 XP VctrP VDD VDD pfet_03v3 L=0.5u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMN1 XN VctrN VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+.ends
+
+
+* expanding   symbol:  gf180/integrator_phasedetector/xschem/integrator_phasedetector.sym # of pins=5
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/integrator_phasedetector/xschem/integrator_phasedetector.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/integrator_phasedetector/xschem/integrator_phasedetector.sch
+.subckt integrator_phasedetector VDD VSS A B OUT
+*.iopin VDD
+*.iopin OUT
+*.iopin VSS
+*.iopin A
+*.iopin B
+xor VDD PWM A B VSS gate_xor
+XRXOR OUT BUF VSS ppolyf_u_1k r_width=1e-6 r_length=1e-6 m=1
+x1 VDD BUF PWM VSS gate_buf_L0d28
+.ends
+
+
+* expanding   symbol:  gf180/gate_and/xschem/gate_and.sym # of pins=5
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/gate_and/xschem/gate_and.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/gate_and/xschem/gate_and.sch
+.subckt gate_and B VDD VSS OUT A
+*.opin OUT
+*.ipin A
+*.iopin VDD
+*.iopin VSS
+*.ipin B
+XMNB OUTN B NX VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+XMPB OUTN B VDD VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMNA NX A VSS VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+XMPA OUTN A VDD VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMIN OUT OUTN VSS VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMIP OUT OUTN VDD VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+.ends
+
+
+* expanding   symbol:  gf180/gate_inv_L0d5/xschem/gate_inv_L0d5.sym # of pins=4
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/gate_inv_L0d5/xschem/gate_inv_L0d5.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/gate_inv_L0d5/xschem/gate_inv_L0d5.sch
+.subckt gate_inv_L0d5 VDD B A VSS
+*.opin B
+*.ipin A
+*.iopin VDD
+*.iopin VSS
+XMN B A VSS VSS nfet_03v3 L=0.5u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+XMP B A VDD VDD pfet_03v3 L=0.5u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=2
+.ends
+
+
+* expanding   symbol:  gf180/gate_xor/xschem/gate_xor.sym # of pins=5
+** sym_path: /foss/designs/chipathon_2025/designs/gf180/gate_xor/xschem/gate_xor.sym
+** sch_path: /foss/designs/chipathon_2025/designs/gf180/gate_xor/xschem/gate_xor.sch
+.subckt gate_xor VDD S A B VSS
+*.iopin VSS
+*.iopin VDD
+*.iopin S
+*.iopin A
+*.iopin B
+XM2 S A net1 VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+XM3 S -B net3 VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+XM1 net3 A VDD VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+XM4 S -A net2 VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+XM5 S B net4 VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+XM6 net4 -A VDD VDD pfet_03v3 L=0.28u W=3u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+XM7 net1 B VSS VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+XM8 net2 -B VSS VSS nfet_03v3 L=0.28u W=1u nf=1 ad='int((nf+1)/2) * W/nf * 0.18u' as='int((nf+2)/2) * W/nf * 0.18u' pd='2*int((nf+1)/2) * (W/nf + 0.18u)'
++ ps='2*int((nf+2)/2) * (W/nf + 0.18u)' nrd='0.18u / W' nrs='0.18u / W' sa=0 sb=0 sd=0 m=4
+xINVA VDD -A A VSS gate_inv_L0d28
+xINVB VDD -B B VSS gate_inv_L0d28
+.ends
+
+.GLOBAL GND
+.end
