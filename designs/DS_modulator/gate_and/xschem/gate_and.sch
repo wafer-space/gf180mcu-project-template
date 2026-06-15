@@ -129,7 +129,7 @@ spiceprefix=X
 }
 C {symbols/pfet_03v3.sym} 680 -370 0 0 {name=MIP
 L=0.28u
-W=4u
+W=3u
 nf=1
 m=2
 ad="'int((nf+1)/2) * W/nf * 0.18u'"
