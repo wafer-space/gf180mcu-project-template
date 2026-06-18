@@ -50,7 +50,7 @@ jobs:
     strategy:
       matrix: ${{fromJSON(needs.prepare.outputs.matrix)}}
     steps:
-      - name: Set veriables
+      - name: Set variables
         run: |
           echo "SLOT=${{ matrix.slot }}" >> $GITHUB_ENV
           echo "SRAM=${{ matrix.sram }}" >> $GITHUB_ENV
@@ -64,7 +64,7 @@ jobs:
           remove-haskell: "true"
           remove-codeql: "true"
           remove-docker-images: "true"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup Nix
         uses: ./.github/actions/setup_nix
         with:
@@ -99,13 +99,13 @@ jobs:
           cat librelane/runs/*/*-misc-reportmanufacturability/manufacturability.rpt >> $GITHUB_STEP_SUMMARY
       - name: Upload GDS
         if: success() || failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.slot }}_gds
           path: final/gds/*
       - name: Upload image
         if: success() || failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.slot }}_image
           path: final/render/*.png
