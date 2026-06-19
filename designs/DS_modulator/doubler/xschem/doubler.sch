@@ -39,20 +39,19 @@ N 800 -430 800 -360 {lab=VDD}
 N 640 -360 640 -330 {lab=#net1}
 N 640 -410 640 -360 {lab=#net1}
 N 640 -260 640 -230 {lab=#net2}
-N 640 -290 640 -280 {lab=VSS}
-N 640 -280 640 -270 {lab=VSS}
-N 640 -270 680 -270 {lab=VSS}
-N 680 -270 680 -180 {lab=VSS}
+N 640 -290 640 -280 {lab=#net3}
+N 640 -280 640 -270 {lab=#net3}
+N 640 -270 680 -270 {lab=#net3}
 N 670 -180 680 -180 {lab=VSS}
 N 670 -140 680 -140 {lab=VSS}
 N 640 -230 640 -210 {lab=#net2}
 N 170 -280 170 -250 {lab=CLKb}
-N 110 -310 130 -310 {lab=CLKb}
-N 110 -310 110 -220 {lab=CLKb}
-N 110 -220 130 -220 {lab=CLKb}
+N 110 -310 130 -310 {lab=CLK}
+N 110 -310 110 -220 {lab=CLK}
+N 110 -220 130 -220 {lab=CLK}
 N 170 -380 170 -340 {lab=VDD}
 N 170 -190 170 -140 {lab=VSS}
-N 80 -260 110 -260 {lab=CLKb}
+N 80 -260 110 -260 {lab=CLK}
 N 170 -260 210 -260 {lab=CLKb}
 N 170 -310 200 -310 {lab=VDD}
 N 170 -340 200 -340 {lab=VDD}
@@ -61,6 +60,22 @@ N 170 -220 210 -220 {lab=VSS}
 N 210 -220 210 -190 {lab=VSS}
 N 170 -190 210 -190 {lab=VSS}
 C {symbols/nfet_03v3.sym} 620 -180 0 0 {name=M1
+<<<<<<< HEAD
+=======
+N 60 -120 60 -60 \{lab=#net1}
+C {symbols/pfet_03v3.sym} 620 -440 0 0 {name=M3
+=======
+C \{symbols/pfet_03v3.sym}
+C {symbols/pfet_03v3.sym} 480 -210 3 0 {name=M4
+=======
+C \{symbols/pfet_03v3.sym}
+C {symbols/nfet_03v3.sym} 890 -290 0 0 {name=M5
+=======
+C \{symbols/nfet_03v3.sym}
+C {symbols/pfet_03v3.sym} 800 -340 3 0 {name=M6
+=======
+C \{symbols/pfet_03v3.sym}
+=======
 L=0.28u
 W=0.22u
 nf=1
@@ -144,6 +159,7 @@ sa=0 sb=0 sd=0
 model=nfet_03v3
 spiceprefix=X
 }
+>>>>>>> ee3ad6b4834bdd7ef7870b8e66f1fdd2117f600e
 C {lab_pin.sym} 640 -510 0 0 {name=p1 sig_type=std_logic lab=VDD}
 C {lab_pin.sym} 640 -510 0 0 {name=p2 sig_type=std_logic lab=VDD}
 C {lab_pin.sym} 390 -230 0 0 {name=p3 sig_type=std_logic lab=VDD}
@@ -202,6 +218,24 @@ model=nfet_03v3
 spiceprefix=X
 }
 C {lab_pin.sym} 170 -380 0 0 {name=p6 sig_type=std_logic lab=VDD}
-C {lab_pin.sym} 170 -140 0 0 {name=p7 sig_type=std_logic lab=VSS}
 C {lab_pin.sym} 210 -260 2 0 {name=p14 sig_type=std_logic lab=CLKb}
 C {lab_pin.sym} 80 -260 0 0 {name=p18 sig_type=std_logic lab=CLK}
+<<<<<<< HEAD
+C {lab_pin.sym} 170 -140 0 1 {name=p6 sig_type=std_logic lab=VSS}
+C {symbols/pfet_03v3.sym} 640 -310 1 0 {name=M7
+L=0.28u
+W=0.22u
+nf=1
+m=1
+ad="'int((nf+1)/2) * W/nf * 0.18u'"
+pd="'2*int((nf+1)/2) * (W/nf + 0.18u)'"
+as="'int((nf+2)/2) * W/nf * 0.18u'"
+ps="'2*int((nf+2)/2) * (W/nf + 0.18u)'"
+nrd="'0.18u / W'" nrs="'0.18u / W'"
+sa=0 sb=0 sd=0
+model=pfet_03v3
+spiceprefix=X
+}
+C {lab_pin.sym} 680 -270 2 0 {name=p7 sig_type=std_logic lab=VDD}
+=======
+>>>>>>> ee3ad6b4834bdd7ef7870b8e66f1fdd2117f600e
