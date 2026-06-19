@@ -17,7 +17,6 @@ N 120 -370 220 -370 {lab=VDD}
 N 420 -340 420 -300 {lab=OUTN}
 N 340 -370 380 -370 {lab=B}
 N 420 -440 420 -400 {lab=VDD}
-N 120 -480 120 -440 {lab=VDD}
 N 200 -130 240 -130 {lab=A}
 N 120 -340 120 -300 {lab=OUTN}
 N 280 -300 280 -260 {lab=OUTN}
@@ -35,6 +34,10 @@ N 700 -440 700 -400 {lab=VDD}
 N 420 -440 700 -440 {lab=VDD}
 N 700 -300 800 -300 {lab=OUT}
 N 40 -300 120 -300 {lab=OUTN}
+N 70 -440 120 -440 {lab=VDD}
+N 70 -60 280 -60 {lab=VSS}
+N 280 -60 700 -60 {lab=VSS}
+N 700 -160 700 -60 {lab=VSS}
 C {symbols/nfet_03v3.sym} 260 -230 0 0 {name=MNB
 L=0.28u
 W=1u
@@ -65,8 +68,8 @@ spiceprefix=X
 }
 C {opin.sym} 800 -300 0 0 {name=p1 lab=OUT}
 C {ipin.sym} 200 -130 0 0 {name=p2 lab=A}
-C {iopin.sym} 120 -480 3 0 {name=p5 lab=VDD}
-C {iopin.sym} 280 -60 1 0 {name=p4 lab=VSS}
+C {iopin.sym} 70 -440 2 0 {name=p5 lab=VDD}
+C {iopin.sym} 70 -60 2 0 {name=p4 lab=VSS}
 C {symbols/nfet_03v3.sym} 260 -130 0 0 {name=MNA
 L=0.28u
 W=1u
@@ -144,4 +147,3 @@ W=2u
 nf=3}
 C {lab_pin.sym} 40 -300 0 0 {name=p17 sig_type=std_logic lab=OUTN}
 C {lab_pin.sym} 280 -180 0 0 {name=p11 sig_type=std_logic lab=NX}
-C {lab_pin.sym} 700 -160 1 1 {name=p12 sig_type=std_logic lab=VSS}
