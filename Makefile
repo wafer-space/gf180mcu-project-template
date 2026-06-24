@@ -5,7 +5,7 @@ TOP = chip_top
 
 PDK_ROOT ?= $(MAKEFILE_DIR)/gf180mcu
 PDK ?= gf180mcuD
-PDK_COMMIT ?= b344c97eacc2aaf8e14ae7e43e2e9dc0871de2c0
+PDK_COMMIT ?= 140b0494c6665b10ce9353cb1c2ef5bcc18e7d66
 
 # Available SCL libraries:
 # gf180mcu_as_sc_mcu7t3v3
