@@ -38,7 +38,7 @@ jobs:
           if ${{ github.repository == 'wafer-space/gf180mcu-project-template' }}; then
             echo "matrix={\"slot\":['1x1', '0p5x1', '1x0p5', '0p5x0p5'],\"domain\":['5v','3v3'],\"include\": [{\"pad\": 'gf180mcu_fd_io', \"domain\": '5v'},{\"scl\": 'gf180mcu_fd_sc_mcu7t5v0', \"domain\": '5v'},{\"sram\": 'gf180mcu_fd_ip_sram', \"domain\": '5v'},{\"pad\": 'gf180mcu_ocd_io', \"domain\": '3v3'},{\"scl\": 'gf180mcu_as_sc_mcu7t3v3', \"domain\": '3v3'},{\"sram\": 'gf180mcu_ocd_ip_sram', \"domain\": '3v3'}]}" >> $GITHUB_OUTPUT
           else
-            echo "matrix={\"slot\":['default'],\"sram\":['default'],\"pad\":['default'],\"scl\":['default']}" >> $GITHUB_OUTPUT
+            echo "matrix={\"slot\":['default'],\"domain\":['default'],\"sram\":['default'],\"pad\":['default'],\"scl\":['default']}" >> $GITHUB_OUTPUT
           fi
     outputs:
       matrix: ${{ steps.export-matrix.outputs.matrix }}
@@ -97,17 +97,21 @@ jobs:
         run: |
           echo "# Manufacturability" >> $GITHUB_STEP_SUMMARY
           cat librelane/runs/*/*-misc-reportmanufacturability/manufacturability.rpt >> $GITHUB_STEP_SUMMARY
+      - name: Print the hash
+        if: success() || failure()
+        run: |
+          shasum final/gds/*
       - name: Upload GDS
         if: success() || failure()
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ matrix.slot }}_gds
+          name: ${{ matrix.slot }}_${{ matrix.domain }}_gds
           path: final/gds/*
       - name: Upload image
         if: success() || failure()
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ matrix.slot }}_image
+          name: ${{ matrix.slot }}_${{ matrix.domain }}_image
           path: final/render/*.png
       - name: Run GL simulation
         if: success() || failure()
