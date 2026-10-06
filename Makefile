@@ -76,7 +76,7 @@ all: librelane ## Build the project (runs LibreLane)
 .PHONY: all
 
 $(PDK_ROOT)/ciel/gf180mcu/versions/$(PDK_COMMIT)/$(PDK):
-	ciel enable $(PDK_COMMIT) --pdk-root $(PDK_ROOT) --pdk-family $(PDK) --include-libraries all
+	ciel enable $(PDK_COMMIT) --pdk-root $(PDK_ROOT) --pdk $(PDK) --include-libraries all
 
 clone-pdk: $(PDK_ROOT)/ciel/gf180mcu/versions/$(PDK_COMMIT)/$(PDK) ## Clone the gf180mcu PDK
 .PHONY: clone-pdk
