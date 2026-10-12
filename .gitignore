@@ -7,3 +7,4 @@ final/
 img/
 *.lyrdb
 generated_defines.svh
+fpga/build/

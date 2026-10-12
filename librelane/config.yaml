@@ -32,10 +32,15 @@ DESIGN_NAME: chip_top
 VERILOG_FILES:
 - dir::../src/chip_top.sv
 - dir::../src/chip_core.sv
+# Shared design RTL (also used by the FPGA flow): every .sv in src/design/
+- dir::../src/design/*.sv
 
 # Enable plugin for better SystemVerilog support
-# USE_SLANG: True
-# SLANG_ARGUMENTS: ['--keep-hierarchy']
+USE_SLANG: True
+# slang compiles each file as its own unit by default, so the `define
+# macros set in chip_top.sv (e.g. the SRAM name) would not be visible in
+# chip_core.sv. --single-unit shares them across files.
+SLANG_ARGUMENTS: ['--single-unit']
 
 # Slightly smaller file sizes
 PRIMARY_GDSII_STREAMOUT_TOOL: klayout

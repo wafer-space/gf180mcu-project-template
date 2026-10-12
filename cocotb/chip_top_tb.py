@@ -116,6 +116,8 @@ def chip_top_runner():
     else:
         sources.append(proj_path / "../src/chip_top.sv")
         sources.append(proj_path / "../src/chip_core.sv")
+        # Shared design RTL: every .sv under src/design/
+        sources += sorted((proj_path / "../src/design").rglob("*.sv"))
 
     sources += [
         # IO pad models

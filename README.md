@@ -74,7 +74,59 @@ The actual pad positions are defined in the LibreLane configuration file under `
 To implement your own design, simply edit `chip_core.sv`. The `chip_core` module receives the clock and reset, as well as the signals from the pads defined in `chip_top`. As an example, a 42-bit wide counter is implemented.
 
 > [!NOTE]
-> For more comprehensive SystemVerilog support, enable the `USE_SLANG` variable in the LibreLane configuration.
+> This project enables `USE_SLANG` (with `--single-unit`, so the macros defined in `chip_top.sv` are visible in the other files) in the LibreLane configuration. If the slang frontend causes problems, comment out `USE_SLANG` and `SLANG_ARGUMENTS` in `librelane/config.yaml` to return to the default parser.
+
+The design itself lives in `src/design/` so that the same RTL can also run on an FPGA, see [Running the Design on an FPGA](#running-the-design-on-an-fpga). `chip_core.sv` is then only the ASIC wrapper (pads, pad controls, SRAM macros) around `design_core`.
+
+## Running the Design on an FPGA
+
+The same RTL can be built for an FPGA, so the design can be checked on hardware before tape-out. The FPGA flow is set up for the ULX3S-85F (Lattice ECP5) using the open-source tools yosys (with the slang plugin), nextpnr-ecp5, ecppack and openFPGALoader.
+
+### Layout
+
+```
+src/chip_core.sv      ASIC wrapper: pads, pad controls, SRAM macros     -> design_core
+src/design/*.sv       SHARED design RTL (no pads, no board pins, no macros)
+fpga/fpga_top.sv      FPGA wrapper: board clock, reset, LEDs, pins      -> design_core
+fpga/boards/*.lpf     pin file for the board
+fpga/Makefile         FPGA build
+```
+
+Put the design in `src/design/`. Every `.sv` file there is picked up automatically by the LibreLane flow, the cocotb simulation and the FPGA build, so adding a file needs no list to be updated. Keep `src/design/` flat (no subfolders) because the LibreLane configuration uses the pattern `src/design/*.sv`. Files meant only for `` `include `` should use the `.svh` extension. Includes are relative to `src/`.
+
+Keep everything target-specific out of `src/design/`: no pad cells, no SRAM macros and no board pins. Those belong in `chip_core.sv` and `fpga/fpga_top.sv`. The FPGA build defines `FPGA`, so `` `ifdef FPGA `` can be used where a difference is unavoidable (for example a memory wrapper using inferred RAM on the FPGA and the gf180mcu SRAM macro on the chip).
+
+`design_core` takes `clk` and an active-low `rst_n`, like `chip_core`. `fpga_top` creates `rst_n` from a power-on reset and button 1 (FIRE1).
+
+### Prerequisites
+
+- An [oss-cad-suite](https://github.com/YosysHQ/oss-cad-suite-build/releases) install (it provides yosys with slang, nextpnr-ecp5, ecppack and openFPGALoader).
+  The Makefile looks for it in `~/Projects/fpga/oss-cad-suite`. Use `OSS=/path/to/oss-cad-suite` for a different location.
+- A ULX3S board connected over USB.
+
+### Build and program
+
+```
+make -C fpga          # build fpga/build/fpga_top.bit
+make -C fpga prog     # program the board (volatile, lost at power-off)
+make -C fpga flash    # write the bitstream to the board's flash
+make -C fpga clean
+```
+
+The placeholder design is a counter that is shown on the 8 LEDs.
+
+### Using the FPGA flow with your own design
+
+1. Replace `src/design/design_core.sv` with your design (and add any other `.sv` files to `src/design/`).
+2. Edit `fpga/fpga_top.sv` to connect the design's ports to the board. Board pins are defined in `fpga/boards/ulx3s.lpf`, which is the full ULX3S pin file. Any top-level port of `fpga_top` needs a matching pin name in that file.
+3. Edit `src/chip_core.sv` to connect the design's ports to the chip pads.
+4. Update `cocotb/chip_top_tb.py` for your design and run `make sim`.
+
+If the design is too slow for the board's 25 MHz clock, nextpnr reports it (`Max frequency ... FAIL`) in `fpga/build/nextpnr.log`. A PLL can then be added in `fpga_top.sv`.
+
+### Other boards
+
+Add `fpga/boards/<name>.lpf` (or the pin file format for that FPGA family) and a new branch in the board table at the top of `fpga/Makefile` (nextpnr device and package, programmer board name and clock frequency), then build with `make -C fpga BOARD=<name>`. A board from another FPGA family also needs a different synthesis and place-and-route flow in that Makefile.
 
 ## Choosing a Different Slot Size
 

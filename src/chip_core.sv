@@ -49,17 +49,17 @@ module chip_core #(
     logic _unused;
     assign _unused = &bidir_in;
 
+    // Shared design (src/design/). Everything pad/macro specific stays here.
     logic [NUM_BIDIR_PADS-1:0] count;
 
-    always_ff @(posedge clk) begin
-        if (!rst_n) begin
-            count <= '0;
-        end else begin
-            if (&input_in) begin
-                count <= count + 1;
-            end
-        end
-    end
+    design_core #(
+        .WIDTH (NUM_BIDIR_PADS)
+    ) i_design_core (
+        .clk    (clk),
+        .rst_n  (rst_n),
+        .enable (&input_in),
+        .count  (count)
+    );
 
     logic [7:0] sram_0_out;
 
