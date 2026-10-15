@@ -67,14 +67,13 @@
 
             extra-python-packages =
               ps: with ps; [
-                # Verification
-                cocotb
-
-                # For KLayout Python DRC runner
-                docopt
-
                 # For logo generation
                 pillow
+              ] ++ lib.optionals (ps ? cocotb) [
+                # Verification
+                # (cocotb is only supported on some platforms due to ghdl-bin:
+                # https://github.com/fossi-foundation/nix-eda/blob/main/nix/ghdl-bin.toml)
+                cocotb
               ];
           });
         }
