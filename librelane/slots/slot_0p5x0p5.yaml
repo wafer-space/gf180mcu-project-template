@@ -1,7 +1,11 @@
 # Floorplanning
 FP_SIZING: absolute
-DIE_AREA: [0, 0, 1936, 2531]
-CORE_AREA: [442, 442, 1494, 2089]
+#DIE_AREA: [0, 0, 1936, 2531]
+#DIE_AREA: [0, 0, "expr::((3932 - 100) / 2)", "expr::((5122 - 100) / 2)"] # 100um scribe line
+DIE_AREA: [0, 0, "expr::((3932 - 150) / 2)", "expr::((5122 - 150) / 2)"] # 150um scribe line
+#DIE_AREA: [0, 0, "expr::((3932 - 200) / 2)", "expr::((5122 - 200) / 2)"] # 200um scribe line
+
+CORE_AREA: [442, 442, "expr::($DIE_AREA[2] - 442)", "expr::($DIE_AREA[3] - 442)"]
 
 VERILOG_DEFINES: ["SLOT_0P5X0P5"]
 

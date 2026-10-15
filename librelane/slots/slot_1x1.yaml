@@ -3,7 +3,7 @@ FP_SIZING: absolute
 # 3880umx5070um including 26um
 # for the sealring on all sides
 DIE_AREA: [0, 0, 3932, 5122]
-CORE_AREA: [442, 442, 3490, 4680]
+CORE_AREA: [442, 442, "expr::($DIE_AREA[2] - 442)", "expr::($DIE_AREA[3] - 442)"]
 
 #VERILOG_DEFINES: ["SLOT_1X1"]
 
