@@ -11,6 +11,7 @@ PDK_COMMIT ?= 792ef67037d74c8c51811eab3ce23cf793491296
 # gf180mcu_as_sc_mcu7t3v3
 # gf180mcu_fd_sc_mcu7t5v0
 # gf180mcu_fd_sc_mcu9t5v0
+# gf180mcu_ocd_sc_rt12t3v3
 # gf180mcu_osu_sc_gp9t3v3 (broken)
 # gf180mcu_osu_sc_gp12t3v3 (broken)
 

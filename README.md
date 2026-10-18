@@ -102,7 +102,7 @@ The project template has support for selecting libraries with the below environm
 
 | Env  | Available Values                                                          | Description                |
 |------|---------------------------------------------------------------------------|----------------------------|
-| SCL  | gf180mcu_fd_sc_mcu7t5v0, gf180mcu_fd_sc_mcu9t5v0, gf180mcu_as_sc_mcu7t3v3 | The standard cell library. |
+| SCL  | gf180mcu_fd_sc_mcu7t5v0, gf180mcu_fd_sc_mcu9t5v0, gf180mcu_as_sc_mcu7t3v3, gf180mcu_ocd_sc_rt12t3v3 | The standard cell library. |
 | PAD  | gf180mcu_fd_io, gf180mcu_ocd_io                                           | The I/O pad library.       |
 | SRAM | gf180mcu_fd_ip_sram, gf180mcu_ocd_ip_sram                                 | The SRAM library.          |
 
