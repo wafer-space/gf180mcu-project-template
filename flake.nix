@@ -9,7 +9,7 @@
   };
 
   inputs = {
-    librelane.url = "github:librelane/librelane/leo/update-pdks";
+    librelane.url = "github:librelane/librelane/dev";
   };
 
   outputs =
